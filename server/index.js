@@ -11,6 +11,7 @@ const router = express.Router();
 
 // Middleware
 // Penting: Tambahkan kembali middleware ini
+app.use(express.json()); 
 app.use(cors());
 
 // --- Koneksi ke MongoDB ---
