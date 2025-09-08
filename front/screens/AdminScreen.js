@@ -22,7 +22,7 @@ const AdminScreen = ({ navigation }) => {
     // Fungsi untuk mengambil data leaderboard dari backend
     const fetchLeaderboard = async () => {
         try {
-            const response = await fetch(`${API_URL}/api/leaderboard`);
+            const response = await fetch(`https://apakalini.netlify.app/api/leaderboard`);
             if (!response.ok) {
                 throw new Error('Gagal mengambil data dari server.');
             }
@@ -47,7 +47,7 @@ const AdminScreen = ({ navigation }) => {
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            const response = await fetch(`${API_URL}/api/scores/reset`, {
+                            const response = await fetch(`https://apakalini.netlify.app/api/scores/reset`, {
                                 method: 'DELETE',
                             });
 
