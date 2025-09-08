@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 // URL backend Anda (pastikan server sudah berjalan!)
-const API_URL = 'https://apakalini.netlify.app/api'; 
+const API_URL = 'https://apakalini.netlify.app'; 
 
 // --- Fungsi untuk menghitung skor Game 3 berdasarkan waktu ---
 const calculateGame3Score = (timeInMillis) => {
