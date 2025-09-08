@@ -586,7 +586,7 @@ export default function GamePlayScreen2({ route, navigation }) {
                 <View style={styles.overlay}>
                     <View style={styles.popupContainer}>
                         <Text style={styles.popupTitle}>Aturan Main</Text>
-                        <Text style={styles.popupText}>Tangkap semua item <Text style={{ color: NEON_GREEN, fontWeight: 'bold' }}>MAKANAN</Text> untuk mendapat <Text style={{ color: NEON_GREEN, fontWeight: 'bold' }}>+10 poin</Text>.</Text>
+                        <Text style={styles.popupText}>Tangkap semua item <Text style={{ color: NEON_GREEN, fontWeight: 'bold' }}>MAKANAN/MINUMAN</Text> untuk mendapat <Text style={{ color: NEON_GREEN, fontWeight: 'bold' }}>+10 poin</Text>.</Text>
                         <Text style={styles.popupText}>Menangkap <Text style={{color: '#eee', fontWeight: 'bold' }}>OBAT</Text> akan mengurangi <Text style={{ color: '#ff4d4d', fontWeight: 'bold' }}>-5 poin</Text>.</Text>
                         <Text style={styles.popupText}><Text style={{ color: RED_DANGER, fontWeight: 'bold' }}>HINDARI item berdenyut merah</Text> atau skormu berkurang <Text style={{ color: RED_DANGER, fontWeight: 'bold' }}>-20 poin</Text>!</Text>
                         <TouchableOpacity style={styles.popupButton} onPress={startGameSequence}>
