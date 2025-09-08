@@ -76,11 +76,10 @@ const TotalScoreScreen = ({ route, navigation }) => {
     // Fungsi untuk mengambil data leaderboard dari backend
     const fetchLeaderboard = async () => {
         try {
-<<<<<<< HEAD
+
             const response = await fetch(`${API_URL}/leaderboard`);
-=======
             const response = await fetch(`https://apakalini.netlify.app/api/leaderboard`);
->>>>>>> cce8a90ec77e2e9b63753a149bad5979af865526
+
             if (!response.ok) {
                 throw new Error('Gagal mengambil data dari server.');
             }
