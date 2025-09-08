@@ -183,13 +183,13 @@ const TotalScoreScreen = ({ route, navigation }) => {
 
                 {/* Daftar Leaderboard */}
                 <FlatList
-                    data={leaderboard}
-                    renderItem={renderLeaderboardItem}
-                    keyExtractor={(item, index) => item.name + item.score + item.timestamp}
-                    style={styles.leaderboardList}
-                    contentContainerStyle={styles.leaderboardContent}
-                    ListEmptyComponent={<Text style={styles.emptyListText}>Leaderboard masih kosong.</Text>}
-                />
+                        data={leaderboard}
+                        renderItem={renderLeaderboardItem}
+                        keyExtractor={(item, index) => `${item.name}-${item.score}-${item.timestamp}`}
+                        style={styles.leaderboardList}
+                        contentContainerStyle={styles.leaderboardContent}
+                        ListEmptyComponent={<Text style={styles.emptyListText}>Belum ada data skor.</Text>}
+                    />
 
                 {/* Tombol Navigasi */}
                 <View style={styles.buttonContainer}>
