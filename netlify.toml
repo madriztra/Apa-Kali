@@ -4,8 +4,8 @@
 
 [build]
   base    = "front"
-  command = "npm install && npx expo export"
-  publish = "front/dist"
+  command = "npm install && npx expo export --platform web"
+  publish = "dist"
 
 [[redirects]]
   from = "/api/*"
