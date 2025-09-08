@@ -59,7 +59,7 @@ const TotalScoreScreen = ({ route, navigation }) => {
     // Fungsi untuk menyimpan skor baru ke backend
     const saveNewScore = async (player, score) => {
         try {
-            await fetch(`${API_URL}/api/scores`, {
+            await fetch(`${API_URL}/scores`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const TotalScoreScreen = ({ route, navigation }) => {
     // Fungsi untuk mengambil data leaderboard dari backend
     const fetchLeaderboard = async () => {
         try {
-            const response = await fetch(`${API_URL}/api/leaderboard`);
+            const response = await fetch(`${API_URL}/leaderboard`);
             if (!response.ok) {
                 throw new Error('Gagal mengambil data dari server.');
             }
