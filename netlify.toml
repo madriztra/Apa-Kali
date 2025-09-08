@@ -3,17 +3,10 @@
   node_bundler = "esbuild"
 
 [build]
-<<<<<<< HEAD
-=======
   command = "cd front && npx expo export"
->>>>>>> cce8a90ec77e2e9b63753a149bad5979af865526
   publish = "front/dist"
   
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/index/:splat"
-<<<<<<< HEAD
   status = 200
-=======
-  status = 200
->>>>>>> cce8a90ec77e2e9b63753a149bad5979af865526
