@@ -77,7 +77,6 @@ const TotalScoreScreen = ({ route, navigation }) => {
     const fetchLeaderboard = async () => {
         try {
 
-            const response = await fetch(`${API_URL}/leaderboard`);
             const response = await fetch(`https://apakalini.netlify.app/api/leaderboard`);
 
             if (!response.ok) {
