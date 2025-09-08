@@ -1,13 +1,13 @@
-[build]
-  base    = "front"
-  command = "npm install && npx expo export:web"
-  publish = "front/dist"
-
 [functions]
   directory = "server"
   node_bundler = "esbuild"
 
+[build]
+  base    = "front"
+  command = "npm install && npx expo export"
+  publish = "front/dist"
+
 [[redirects]]
   from = "/api/*"
-  to   = "/.netlify/functions/index/:splat"
+  to = "/.netlify/functions/index/:splat"
   status = 200
