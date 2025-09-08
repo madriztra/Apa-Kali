@@ -33,13 +33,10 @@
     "@babel/core": "^7.20.0",
     "@react-native-community/cli": "^19.1.0"
   },
-  "private": true
-},
-{
+  "private": true,
   "resolutions": {
     "metro": "0.76.8",
     "metro-config": "0.76.8",
     "metro-core": "0.76.8"
   }
 }
-
