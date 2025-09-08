@@ -10,6 +10,8 @@ const app = express();
 const router = express.Router(); 
 
 // Middleware
+// Penting: Tambahkan kembali middleware ini
+app.use(express.json()); 
 app.use(cors());
 
 // --- Koneksi ke MongoDB ---
@@ -57,8 +59,6 @@ router.delete('/scores/reset', async (req, res) => {
     }
 });
 
-// Perbaikan: Gunakan path '/api' untuk router Anda.
-// Ini akan cocok dengan redirect di netlify.toml.
 app.use('/api', router);
 
 // Eksport aplikasi Anda sebagai fungsi serverless
