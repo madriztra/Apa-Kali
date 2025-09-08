@@ -59,7 +59,7 @@ const TotalScoreScreen = ({ route, navigation }) => {
     // Fungsi untuk menyimpan skor baru ke backend
     const saveNewScore = async (player, score) => {
         try {
-            await fetch(`${API_URL}/scores`, {
+            await fetch(`https://apakalini.netlify.app/api/scores`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
