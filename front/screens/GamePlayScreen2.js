@@ -552,7 +552,7 @@ export default function GamePlayScreen2({ route, navigation }) {
                         </View>
                         
                         <View style={styles.objectiveTextContainer}>
-                            <Text style={styles.objectiveText}>Tangkap: <Text style={{ color: NEON_GREEN }}>MAKANAN</Text></Text>
+                            <Text style={styles.objectiveText}>Tangkap: <Text style={{ color: NEON_GREEN }}>MAKANAN/MINUMAN</Text></Text>
                         </View>
 
                         <View style={styles.gameArea} onLayout={onGameAreaLayout}>
