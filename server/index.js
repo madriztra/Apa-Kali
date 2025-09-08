@@ -1,16 +1,13 @@
-// File: server/index.js
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const serverless = require('serverless-http'); // Tambahkan ini
+const serverless = require('serverless-http'); 
 
 dotenv.config();
 
 const app = express();
-const router = express.Router(); // Buat Router Express baru
-const PORT = process.env.PORT || 5000;
+const router = express.Router(); 
 
 // Middleware
 app.use(cors());
@@ -60,10 +57,9 @@ router.delete('/scores/reset', async (req, res) => {
     }
 });
 
-// Penting: Hapus app.listen dan ekspor aplikasi
-// app.listen(PORT, ...); // HAPUS BARIS INI!
+// Perbaikan: Gunakan path '/api' untuk router Anda.
+// Ini akan cocok dengan redirect di netlify.toml.
+app.use('/api', router);
 
-app.use('/.netlify/functions/server', router); // Rute untuk Netlify
-
-module.exports = app;
-module.exports.handler = serverless(app); // Ekspor sebagai fungsi tanpa server
+// Eksport aplikasi Anda sebagai fungsi serverless
+module.exports.handler = serverless(app);
