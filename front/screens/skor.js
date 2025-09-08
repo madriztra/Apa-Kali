@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 // URL backend Anda (pastikan server sudah berjalan!)
-const API_URL = 'https://apakalini.netlify.app/api'; 
+const API_URL = 'https://apakalini.netlify.app'; 
 
 // --- Fungsi untuk menghitung skor Game 3 berdasarkan waktu ---
 const calculateGame3Score = (timeInMillis) => {
@@ -59,7 +59,7 @@ const TotalScoreScreen = ({ route, navigation }) => {
     // Fungsi untuk menyimpan skor baru ke backend
     const saveNewScore = async (player, score) => {
         try {
-            await fetch(`${API_URL}/api/scores`, {
+            await fetch(`https://apakalini.netlify.app/api/scores`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const TotalScoreScreen = ({ route, navigation }) => {
     // Fungsi untuk mengambil data leaderboard dari backend
     const fetchLeaderboard = async () => {
         try {
-            const response = await fetch(`${API_URL}/api/leaderboard`);
+            const response = await fetch(`${API_URL}/leaderboard`);
             if (!response.ok) {
                 throw new Error('Gagal mengambil data dari server.');
             }
@@ -183,13 +183,13 @@ const TotalScoreScreen = ({ route, navigation }) => {
 
                 {/* Daftar Leaderboard */}
                 <FlatList
-                    data={leaderboard}
-                    renderItem={renderLeaderboardItem}
-                    keyExtractor={(item, index) => item.name + item.score + item.timestamp}
-                    style={styles.leaderboardList}
-                    contentContainerStyle={styles.leaderboardContent}
-                    ListEmptyComponent={<Text style={styles.emptyListText}>Leaderboard masih kosong.</Text>}
-                />
+                        data={leaderboard}
+                        renderItem={renderLeaderboardItem}
+                        keyExtractor={(item, index) => `${item.name}-${item.score}-${item.timestamp}`}
+                        style={styles.leaderboardList}
+                        contentContainerStyle={styles.leaderboardContent}
+                        ListEmptyComponent={<Text style={styles.emptyListText}>Belum ada data skor.</Text>}
+                    />
 
                 {/* Tombol Navigasi */}
                 <View style={styles.buttonContainer}>
