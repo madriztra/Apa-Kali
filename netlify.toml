@@ -10,4 +10,4 @@
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/index/:splat"
-  status = 200
+  status = 200 
