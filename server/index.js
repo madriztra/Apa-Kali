@@ -3,9 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const serverless = require('serverless-http'); 
- 
-dotenv.config();
 
+dotenv.config();
 
 const app = express();
 const router = express.Router(); 
