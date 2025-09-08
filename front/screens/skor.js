@@ -59,7 +59,7 @@ const TotalScoreScreen = ({ route, navigation }) => {
     // Fungsi untuk menyimpan skor baru ke backend
     const saveNewScore = async (player, score) => {
         try {
-            await fetch(`https://apakalini.netlify.app/api/scores`, {
+            await fetch(`${API_URL}/api/scores`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ const TotalScoreScreen = ({ route, navigation }) => {
     const fetchLeaderboard = async () => {
         try {
 
-            const response = await fetch(`https://apakalini.netlify.app/api/leaderboard`);
+            const response = await fetch(`${API_URL}/api/leaderboard`);
 
             if (!response.ok) {
                 throw new Error('Gagal mengambil data dari server.');
