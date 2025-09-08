@@ -10,7 +10,6 @@ const app = express();
 const router = express.Router(); 
 
 // Middleware
-app.use(express.json());
 app.use(cors());
 
 // --- Koneksi ke MongoDB ---
