@@ -1,0 +1,6 @@
+[functions]
+  directory = "server"
+  node_bundler = "esbuild"
+
+[build]
+  publish = "front/dist"
