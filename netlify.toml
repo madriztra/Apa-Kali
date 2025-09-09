@@ -1,13 +1,11 @@
-# File: netlify.toml
 [functions]
   directory = "server"
   node_bundler = "esbuild"
 
 [build]
-  base = "front"
-  command = "npm install && npx expo export --platform web"
-  publish = "dist"
-
+  command = "cd front && npx expo export"
+  publish = "front/dist"
+  
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/index/:splat"
