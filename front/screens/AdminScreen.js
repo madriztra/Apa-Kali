@@ -12,8 +12,6 @@ import {
 
 const API_URL = 'https://apakalini.netlify.app/api';
 
-// --- FUNGSI PEMBANTU UNTUK fetch ---
-// Ini akan membuat kode Anda lebih rapi dan menghindari pengulangan
 const handleApiResponse = async (response) => {
     if (!response.ok) {
         throw new Error(`Server error: ${response.status} ${response.statusText}`);
@@ -28,7 +26,7 @@ const AdminScreen = ({ navigation }) => {
     const fetchLeaderboard = async () => {
         try {
             const response = await fetch(`${API_URL}/leaderboard`);
-            const data = await handleApiResponse(response); // Gunakan fungsi pembantu di sini
+            const data = await handleApiResponse(response);
             setLeaderboard(data);
             setLastFetchTimestamp(new Date());
         } catch (error) {
@@ -40,7 +38,7 @@ const AdminScreen = ({ navigation }) => {
     const resetLeaderboard = async () => {
         Alert.alert(
             "Konfirmasi Reset",
-            "Apakah Anda yakin ingin menghapus semua data skor? Aksi ini tidak bisa dibatalkan.",
+            "Apakah Anda yakin ingin mereset skor semua pemain menjadi 0?",
             [
                 { text: "Batal", style: "cancel" },
                 { 
@@ -52,10 +50,11 @@ const AdminScreen = ({ navigation }) => {
                                 method: 'DELETE',
                             });
 
-                            await handleApiResponse(response); // Gunakan fungsi pembantu di sini
+                            await handleApiResponse(response);
 
-                            setLeaderboard([]);
-                            Alert.alert("Sukses", "Data leaderboard berhasil direset.");
+                            // Panggil fetchLeaderboard untuk memperbarui tampilan
+                            await fetchLeaderboard(); 
+                            Alert.alert("Sukses", "Skor leaderboard berhasil direset.");
                         } catch (error) {
                             console.error("Gagal mereset leaderboard:", error);
                             Alert.alert("Error", "Gagal mereset leaderboard. Cek koneksi server.");
@@ -130,7 +129,6 @@ const AdminScreen = ({ navigation }) => {
                 >
                     <Text style={styles.backButtonText}>Kembali</Text>
                 </TouchableOpacity>
-
             </View>
         </ImageBackground>
     );
