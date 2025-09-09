@@ -79,7 +79,7 @@ export default function HomeScreen() {
             
             {/* Admin button in top-left */}
             <Pressable onPress={goToAdminScreen} style={styles.adminButton}>
-                <Text style={styles.adminButtonText}>Admin</Text>
+                <Text style={styles.adminButtonText}>ADMIN</Text>
             </Pressable>
 
             <View style={styles.centerContainer}>
