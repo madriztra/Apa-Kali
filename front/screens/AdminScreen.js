@@ -10,19 +10,15 @@ import {
     Alert,
 } from 'react-native';
 
-// URL backend Anda (pastikan server sudah berjalan!)
-const API_URL = 'https://apakalini.netlify.app';
+const API_URL = 'https://apakalini.netlify.app/api';
 
 const AdminScreen = ({ navigation }) => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [lastFetchTimestamp, setLastFetchTimestamp] = useState(null);
 
-    // --- FUNGSI BARU UNTUK BACKEND ---
-
-    // Fungsi untuk mengambil data leaderboard dari backend
     const fetchLeaderboard = async () => {
         try {
-            const response = await fetch(`${API_URL}/api/leaderboard`);
+            const response = await fetch(`${API_URL}/leaderboard`);
             if (!response.ok) {
                 throw new Error('Gagal mengambil data dari server.');
             }
@@ -35,7 +31,6 @@ const AdminScreen = ({ navigation }) => {
         }
     };
 
-    // Fungsi untuk mereset (menghapus) semua data leaderboard di backend
     const resetLeaderboard = async () => {
         Alert.alert(
             "Konfirmasi Reset",
@@ -47,7 +42,7 @@ const AdminScreen = ({ navigation }) => {
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            const response = await fetch(`${API_URL}/api/scores/reset`, {
+                            const response = await fetch(`${API_URL}/scores/reset`, {
                                 method: 'DELETE',
                             });
 
@@ -55,7 +50,7 @@ const AdminScreen = ({ navigation }) => {
                                 throw new Error('Gagal mereset data di server.');
                             }
 
-                            setLeaderboard([]); // Bersihkan state lokal setelah berhasil
+                            setLeaderboard([]);
                             Alert.alert("Sukses", "Data leaderboard berhasil direset.");
                         } catch (error) {
                             console.error("Gagal mereset leaderboard:", error);
@@ -67,12 +62,10 @@ const AdminScreen = ({ navigation }) => {
         );
     };
 
-    // Panggil fetchLeaderboard saat komponen pertama kali dimuat
     useEffect(() => {
         fetchLeaderboard();
     }, []);
 
-    // Render item untuk FlatList
     const renderLeaderboardItem = ({ item, index }) => (
         <View style={styles.leaderboardItem}>
             <Text style={styles.rankText}>#{index + 1}</Text>
