@@ -10,12 +10,13 @@ import {
     Alert,
 } from 'react-native';
 
-const API_URL = 'https://apakalini.netlify.app/';
+const API_URL = 'https://apakalini.netlify.app/api';
 
 const AdminScreen = ({ navigation }) => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [lastFetchTimestamp, setLastFetchTimestamp] = useState(null);
 
+    // Fungsi untuk mengambil data leaderboard dari backend
     const fetchLeaderboard = async () => {
         try {
             const response = await fetch(`${API_URL}/leaderboard`);
