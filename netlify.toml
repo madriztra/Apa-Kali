@@ -3,7 +3,7 @@
   node_bundler = "esbuild"
 
 [build]
-  command = "cd front && npx expo export"
+  command = "cd front && npm install && npx expo export"
   publish = "front/dist"
   
 [[redirects]]
