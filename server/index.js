@@ -59,7 +59,7 @@ router.delete('/scores/reset', async (req, res) => {
     }
 });
 
-app.use('/api', router);
+app.use(router); 
 
 // Eksport aplikasi Anda sebagai fungsi serverless
 module.exports.handler = serverless(app);
