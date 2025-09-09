@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 /* -------------------------------------------
-    HOOK RESPONSIVE
+    HOOK RESPONSIVE
 --------------------------------------------*/
 const guidelineBaseWidth = 375;
 const guidelineBaseHeight = 812;
@@ -34,7 +34,7 @@ function useResponsive() {
 }
 
 /* -------------------------------------------
-    ASET & KONFIGURASI GAME
+    ASET & KONFIGURASI GAME
 --------------------------------------------*/
 const ALL_FOOD_ITEMS = [
     { id: 'food1', image: require('../assets/assetgame2/makanan1.png'), category: 'makanan' },
@@ -81,14 +81,12 @@ const CATCHER_IMAGE = require('../assets/assetgame2/kotak2.png');
 const BACKGROUND_IMAGE = require('../assets/game-bg.png');
 
 const GAME_DURATION_MS = 60000;
-// [DIUBAH] Kecepatan item jatuh ditingkatkan
-const INITIAL_ITEM_FALL_DURATION = 4000; // Sebelumnya 5000
-const FINAL_ITEM_FALL_DURATION = 2000;   // Sebelumnya 2500
+const INITIAL_ITEM_FALL_DURATION = 4000;
+const FINAL_ITEM_FALL_DURATION = 2000;
 const SPAWN_INTERVAL_MIN = 500;
 const SPAWN_INTERVAL_MAX = 1000;
 const VERY_DANGEROUS_SPAWN_CHANCE = 0.1;
-// [DIUBAH] Peluang munculnya item obat ditingkatkan untuk menambah kesulitan
-const AVOID_ITEM_SPAWN_CHANCE = 0.4; // 40% peluang muncul item obat
+const AVOID_ITEM_SPAWN_CHANCE = 0.4;
 
 const NEON_GREEN = '#39FF14';
 const DARK_BLUE = '#0d1b2a';
@@ -97,7 +95,7 @@ const RED_DANGER = '#FF4D4D';
 
 
 /* -------------------------------------------
-    FallingItem Component
+    FallingItem Component
 --------------------------------------------*/
 const FallingItem = memo(({ itemObject, onMiss, gameAreaHeight }) => {
     useEffect(() => {
@@ -153,7 +151,7 @@ const FallingItem = memo(({ itemObject, onMiss, gameAreaHeight }) => {
 });
 
 /* -------------------------------------------
-    GamePlayScreen Component
+    GamePlayScreen Component
 --------------------------------------------*/
 export default function GamePlayScreen2({ route, navigation }) {
     const { screenWidth, screenHeight, widthScale, heightScale, moderateScale } = useResponsive();
@@ -211,34 +209,35 @@ export default function GamePlayScreen2({ route, navigation }) {
     const countdownTimers = useRef([]);
     const timeLeftRef = useRef(GAME_DURATION_MS);
 
+    // --- STYLESHEET RESPONSIVE ---
     const styles = useMemo(() => StyleSheet.create({
         fullScreenBg: { flex: 1, backgroundColor: DARK_BLUE, overflow: 'hidden' },
         gameContainer: { ...StyleSheet.absoluteFillObject, justifyContent: 'center', alignItems: 'center' },
-        frameOuter: { width: '90%', height: '80%', borderRadius: moderateScale(30), backgroundColor: MID_BLUE, overflow: 'hidden', borderWidth: moderateScale(3), borderColor: NEON_GREEN, shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.9, shadowRadius: moderateScale(15), elevation: 30, marginBottom: heightScale(110) },
+        frameOuter: { width: widthScale(340), height: heightScale(650), borderRadius: moderateScale(30), backgroundColor: MID_BLUE, overflow: 'hidden', borderWidth: moderateScale(3), borderColor: NEON_GREEN, shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.9, shadowRadius: moderateScale(15), elevation: moderateScale(30), marginBottom: heightScale(110) },
         frameInner: { flex: 1, borderRadius: moderateScale(28), backgroundColor: DARK_BLUE, padding: moderateScale(5) },
-        topSection: { paddingHorizontal: moderateScale(20), paddingVertical: moderateScale(12), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(27, 38, 59, 0.7)', borderRadius: moderateScale(15), marginHorizontal: moderateScale(10), marginTop: moderateScale(5), borderWidth: 1, borderColor: NEON_GREEN, shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: moderateScale(8), elevation: 15 },
-        objectiveTextContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(27, 38, 59, 0.7)', borderRadius: moderateScale(15), marginHorizontal: moderateScale(10), marginBottom: moderateScale(5), paddingVertical: moderateScale(8), borderWidth: 1, borderColor: NEON_GREEN, shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: moderateScale(8), elevation: 15 },
+        topSection: { paddingHorizontal: moderateScale(20), paddingVertical: moderateScale(12), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(27, 38, 59, 0.7)', borderRadius: moderateScale(15), marginHorizontal: moderateScale(10), marginTop: moderateScale(5), borderWidth: moderateScale(1), borderColor: NEON_GREEN, shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: moderateScale(8), elevation: moderateScale(15) },
+        objectiveTextContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(27, 38, 59, 0.7)', borderRadius: moderateScale(15), marginHorizontal: moderateScale(10), marginBottom: moderateScale(5), paddingVertical: moderateScale(8), borderWidth: moderateScale(1), borderColor: NEON_GREEN, shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.5, shadowRadius: moderateScale(8), elevation: moderateScale(15) },
         timerText: { fontSize: moderateScale(22), fontWeight: 'bold', color: '#fff', fontVariant: ['tabular-nums'] },
         scoreText: { fontSize: moderateScale(22), fontWeight: '900', color: NEON_GREEN },
         objectiveText: { color: '#FFF', fontSize: moderateScale(18), fontWeight: 'bold', textTransform: 'uppercase' },
         gameArea: { flex: 1, position: 'relative', overflow: 'hidden' },
         catcher: { width: CATCHER_WIDTH, height: CATCHER_HEIGHT, position: 'absolute', bottom: CATCHER_BOTTOM },
         catcherImage: { flex: 1, width: '100%', height: '100%' },
-        itemWrapper: { position: 'absolute', width: ITEM_SIZE, height: ITEM_SIZE, backgroundColor: 'rgba(173, 216, 230, 0.25)', borderRadius: ITEM_SIZE / 2, borderWidth: 2, borderColor: 'rgba(255, 255, 255, 0.4)', justifyContent: 'center', alignItems: 'center' },
+        itemWrapper: { position: 'absolute', width: ITEM_SIZE, height: ITEM_SIZE, backgroundColor: 'rgba(173, 216, 230, 0.25)', borderRadius: ITEM_SIZE / 2, borderWidth: moderateScale(2), borderColor: 'rgba(255, 255, 255, 0.4)', justifyContent: 'center', alignItems: 'center' },
         gridItemImage: { width: '80%', height: '80%' },
-        controlsContainer: { position: 'absolute', bottom: heightScale(20), left: '5%', right: '5%', height: heightScale(90), backgroundColor: 'rgba(27, 38, 59, 0.8)', borderRadius: moderateScale(25), borderWidth: moderateScale(2), borderColor: NEON_GREEN, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: widthScale(20), shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.7, shadowRadius: moderateScale(10), elevation: 20 },
+        controlsContainer: { position: 'absolute', bottom: heightScale(20), left: widthScale(20), right: widthScale(20), height: heightScale(90), backgroundColor: 'rgba(27, 38, 59, 0.8)', borderRadius: moderateScale(25), borderWidth: moderateScale(2), borderColor: NEON_GREEN, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: widthScale(20), shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.7, shadowRadius: moderateScale(10), elevation: moderateScale(20) },
         controlButtonWrapper: { transform: [{ scale: 1 }] },
-        arrowBtn: { backgroundColor: 'transparent', borderWidth: moderateScale(3), borderColor: NEON_GREEN, width: moderateScale(65), height: moderateScale(65), borderRadius: moderateScale(35), justifyContent: 'center', alignItems: 'center', shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.8, shadowRadius: moderateScale(10), elevation: 20 },
+        arrowBtn: { backgroundColor: 'transparent', borderWidth: moderateScale(3), borderColor: NEON_GREEN, width: moderateScale(65), height: moderateScale(65), borderRadius: moderateScale(35), justifyContent: 'center', alignItems: 'center', shadowColor: NEON_GREEN, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.8, shadowRadius: moderateScale(10), elevation: moderateScale(20) },
         arrowText: { fontSize: moderateScale(35), fontWeight: 'bold', color: NEON_GREEN, lineHeight: moderateScale(40) },
         overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.75)', justifyContent: 'center', alignItems: 'center', zIndex: 10 },
-        popupContainer: { width: '85%', backgroundColor: MID_BLUE, borderRadius: moderateScale(20), padding: moderateScale(25), borderWidth: moderateScale(2), borderColor: NEON_GREEN, alignItems: 'center' },
+        popupContainer: { width: widthScale(300), backgroundColor: MID_BLUE, borderRadius: moderateScale(20), padding: moderateScale(25), borderWidth: moderateScale(2), borderColor: NEON_GREEN, alignItems: 'center' },
         popupTitle: { fontSize: moderateScale(28), fontWeight: 'bold', color: '#fff', marginBottom: moderateScale(15) },
         popupText: { fontSize: moderateScale(16), color: '#eee', textAlign: 'center', marginBottom: moderateScale(10) },
-        finalScoreText: { fontSize: moderateScale(70), fontWeight: '900', color: NEON_GREEN, textShadowColor: NEON_GREEN, textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 20, marginVertical: moderateScale(15) },
+        finalScoreText: { fontSize: moderateScale(70), fontWeight: '900', color: NEON_GREEN, textShadowColor: NEON_GREEN, textShadowOffset: { width: 0, height: 0 }, textShadowRadius: moderateScale(20), marginVertical: moderateScale(15) },
         popupButton: { marginTop: moderateScale(15), backgroundColor: NEON_GREEN, paddingVertical: moderateScale(12), paddingHorizontal: moderateScale(40), borderRadius: moderateScale(15) },
         popupButtonText: { fontSize: moderateScale(18), fontWeight: 'bold', color: DARK_BLUE },
-        countdown: { fontSize: moderateScale(90), fontWeight: '900', color: '#fff', textShadowColor: NEON_GREEN, textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 20 },
-        notificationContainer: { position: 'absolute', top: '40%', alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.8)', paddingHorizontal: moderateScale(30), paddingVertical: moderateScale(15), borderRadius: 20, borderWidth: 2, zIndex: 20 },
+        countdown: { fontSize: moderateScale(90), fontWeight: '900', color: '#fff', textShadowColor: NEON_GREEN, textShadowOffset: { width: 0, height: 0 }, textShadowRadius: moderateScale(20) },
+        notificationContainer: { position: 'absolute', top: '40%', alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.8)', paddingHorizontal: moderateScale(30), paddingVertical: moderateScale(15), borderRadius: moderateScale(20), borderWidth: moderateScale(2), zIndex: 20 },
         notificationText: { fontSize: moderateScale(28), fontWeight: '900', textTransform: 'uppercase' },
     }), [CATCHER_WIDTH, CATCHER_HEIGHT, ITEM_SIZE, CATCHER_BOTTOM, moderateScale, heightScale, widthScale]);
 
@@ -360,18 +359,23 @@ export default function GamePlayScreen2({ route, navigation }) {
             const caughtItem = item.item;
             if (caughtItem.type === 'veryDangerous') {
                 setScore(prev => Math.max(0, prev - 20));
+                triggerNotification('-20', 'danger');
             } else if (caughtItem.category === 'makanan') {
                 setScore(prev => prev + 10);
+                triggerNotification('+10', 'normal');
             } else {
                 setScore(prev => Math.max(0, prev - 5));
+                triggerNotification('-5', 'danger');
             }
+        } else {
+            triggerNotification('Miss!', 'danger');
         }
         
         Animated.parallel([
             Animated.timing(item.scale, { toValue: 0, duration: 200, useNativeDriver: true }),
             Animated.timing(item.opacity, { toValue: 0, duration: 200, useNativeDriver: true }),
         ]).start(() => removeItem(key));
-    }, [removeItem]);
+    }, [removeItem, triggerNotification]);
 
     const spawnNewItem = useCallback(() => {
         if (isGameOver || isPreGame || !gameAreaLayout.current.width) return;
@@ -381,14 +385,10 @@ export default function GamePlayScreen2({ route, navigation }) {
         let baseItem;
         if (isVeryDangerous) {
             baseItem = ALL_AVOID_ITEMS[Math.floor(Math.random() * ALL_AVOID_ITEMS.length)];
-            triggerNotification('BAHAYA!', 'danger');
         } else {
-            // [DIUBAH] Logika spawn item diubah untuk memperbanyak item obat
             if (Math.random() < AVOID_ITEM_SPAWN_CHANCE) {
-                // Paksa munculkan item obat
                 baseItem = ALL_AVOID_ITEMS[Math.floor(Math.random() * ALL_AVOID_ITEMS.length)];
             } else {
-                // Munculkan item makanan
                 baseItem = ALL_FOOD_ITEMS[Math.floor(Math.random() * ALL_FOOD_ITEMS.length)];
             }
         }
@@ -576,7 +576,7 @@ export default function GamePlayScreen2({ route, navigation }) {
                     </TouchableOpacity>
                 </Animated.View>
                 <Animated.View style={[styles.controlButtonWrapper, { transform: [{ scale: rightBtnScale }] }]}>
-                    <TouchableOpacity style={styles.arrowBtn} onPress={() => handleSingleTap(1)} onLongPress={() => startContinuousMove(1)} onPressIn={() => handlePressInDirection(1, rightBtnScale)} onPressOut={() => handlePressOut(rightBtnScale)} delayLongPress={150} activeOpacity={0.8} >
+                    <TouchableOpacity style={styles.arrowBtn} onPress={() => handleSingleTap(1)} onLongPress={() => startContinuousMove(1)} onPressIn={() => handlePressInDirection(1, rightBtnScale)} onPressOut={() => handlePressOut(rightBtnBtnScale)} delayLongPress={150} activeOpacity={0.8} >
                         <Text style={styles.arrowText}>{'▶'}</Text>
                     </TouchableOpacity>
                 </Animated.View>
