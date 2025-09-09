@@ -12,19 +12,25 @@ import {
 
 const API_URL = 'https://apakalini.netlify.app/api';
 
+// --- FUNGSI PEMBANTU UNTUK fetch ---
+// Ini akan membuat kode Anda lebih rapi dan menghindari pengulangan
+const handleApiResponse = async (response) => {
+    if (!response.ok) {
+        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+};
+
 const AdminScreen = ({ navigation }) => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [lastFetchTimestamp, setLastFetchTimestamp] = useState(null);
 
-    // Fungsi untuk mengambil data leaderboard dari backend
     const fetchLeaderboard = async () => {
         try {
             const response = await fetch(`${API_URL}/leaderboard`);
-            if (!response.ok) {
-                throw new Error('Gagal mengambil data dari server.');
-            }
-            const data = await response.json();
+            const data = await handleApiResponse(response); // Gunakan fungsi pembantu di sini
             setLeaderboard(data);
+            setLastFetchTimestamp(new Date());
         } catch (error) {
             console.error("Gagal mengambil data leaderboard:", error);
             Alert.alert("Error", "Gagal mengambil data leaderboard. Cek koneksi server.");
@@ -46,9 +52,7 @@ const AdminScreen = ({ navigation }) => {
                                 method: 'DELETE',
                             });
 
-                            if (!response.ok) {
-                                throw new Error('Gagal mereset data di server.');
-                            }
+                            await handleApiResponse(response); // Gunakan fungsi pembantu di sini
 
                             setLeaderboard([]);
                             Alert.alert("Sukses", "Data leaderboard berhasil direset.");
