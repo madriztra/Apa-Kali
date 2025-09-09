@@ -12,10 +12,8 @@ import {
     Alert,
 } from 'react-native';
 
-// URL backend Anda (pastikan server sudah berjalan!)
-const API_URL = 'https://apakalini.netlify.app'; 
+const API_URL = 'https://apakalini.netlify.app/api'; 
 
-// --- Fungsi untuk menghitung skor Game 3 berdasarkan waktu ---
 const calculateGame3Score = (timeInMillis) => {
     const timeInSeconds = timeInMillis / 1000;
     if (timeInSeconds <= 30) {
@@ -28,21 +26,17 @@ const calculateGame3Score = (timeInMillis) => {
 };
 
 const TotalScoreScreen = ({ route, navigation }) => {
-    // --- Menerima data baru dari Game 3 ---
     const { scoreGame1dan2, timeGame3, playerName } = route.params || { 
         scoreGame1dan2: 0, 
         timeGame3: 0, 
         playerName: 'Pemain' 
     };
 
-    // --- Hitung skor Game 3 dan skor total ---
     const scoreGame3 = calculateGame3Score(timeGame3);
     const totalScore = scoreGame1dan2 + scoreGame3;
 
-    // --- State untuk data leaderboard ---
     const [leaderboard, setLeaderboard] = useState([]);
 
-    // --- State & Ref untuk Animasi Skor ---
     const [displayScores, setDisplayScores] = useState({
         game1dan2: 0,
         game3: 0,
@@ -54,31 +48,24 @@ const TotalScoreScreen = ({ route, navigation }) => {
         total: new Animated.Value(0),
     }).current;
 
-    // --- FUNGSI BARU UNTUK BACKEND ---
-
-    // Fungsi untuk menyimpan skor baru ke backend
     const saveNewScore = async (player, score) => {
         try {
-            await fetch(`${API_URL}/api/scores`, {
+            await fetch(`${API_URL}/scores`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ name: player, score: score }),
             });
-            console.log("Skor berhasil dikirim ke backend.");
         } catch (error) {
             console.error("Gagal menyimpan skor ke backend:", error);
             Alert.alert("Error", "Gagal menyimpan skor ke leaderboard. Cek koneksi server.");
         }
     };
     
-    // Fungsi untuk mengambil data leaderboard dari backend
     const fetchLeaderboard = async () => {
         try {
-
-            const response = await fetch(`${API_URL}/api/leaderboard`);
-
+            const response = await fetch(`${API_URL}/leaderboard`);
             if (!response.ok) {
                 throw new Error('Gagal mengambil data dari server.');
             }
@@ -90,9 +77,7 @@ const TotalScoreScreen = ({ route, navigation }) => {
         }
     };
 
-    // Efek untuk menjalankan animasi, menyimpan skor, dan mengambil data
     useEffect(() => {
-        // Jalankan animasi skor
         Animated.parallel([
             Animated.timing(animatedValues.game1dan2, {
                 toValue: scoreGame1dan2,
@@ -113,15 +98,11 @@ const TotalScoreScreen = ({ route, navigation }) => {
                 useNativeDriver: false,
             })
         ]).start(async () => {
-            // Setelah animasi selesai, simpan skor ke backend
             await saveNewScore(playerName, totalScore);
-            
-            // Setelah menyimpan, ambil data leaderboard terbaru
             await fetchLeaderboard();
         });
     }, [animatedValues, scoreGame1dan2, scoreGame3, totalScore, playerName]);
 
-    // Efek untuk mendengarkan perubahan nilai animasi
     useEffect(() => {
         const listener1 = animatedValues.game1dan2.addListener(({ value }) => {
             setDisplayScores(prev => ({ ...prev, game1dan2: Math.round(value) }));
@@ -140,7 +121,6 @@ const TotalScoreScreen = ({ route, navigation }) => {
         };
     }, [animatedValues]);
     
-    // Render item untuk FlatList
     const renderLeaderboardItem = ({ item, index }) => (
         <View style={styles.leaderboardItem}>
             <Text style={styles.rankText}>#{index + 1}</Text>
@@ -185,13 +165,13 @@ const TotalScoreScreen = ({ route, navigation }) => {
 
                 {/* Daftar Leaderboard */}
                 <FlatList
-                        data={leaderboard}
-                        renderItem={renderLeaderboardItem}
-                        keyExtractor={(item, index) => `${item.name}-${item.score}-${item.timestamp}`}
-                        style={styles.leaderboardList}
-                        contentContainerStyle={styles.leaderboardContent}
-                        ListEmptyComponent={<Text style={styles.emptyListText}>Belum ada data skor.</Text>}
-                    />
+                    data={leaderboard}
+                    renderItem={renderLeaderboardItem}
+                    keyExtractor={(item, index) => item.name + item.score + item.timestamp}
+                    style={styles.leaderboardList}
+                    contentContainerStyle={styles.leaderboardContent}
+                    ListEmptyComponent={<Text style={styles.emptyListText}>Leaderboard masih kosong.</Text>}
+                />
 
                 {/* Tombol Navigasi */}
                 <View style={styles.buttonContainer}>
