@@ -10,7 +10,7 @@ const app = express();
 const router = express.Router();
 
 // Middleware
-app.use(express.json()); 
+app.use(express.json());
 app.use(cors());
 
 // --- Koneksi ke MongoDB ---
@@ -51,17 +51,18 @@ router.get('/leaderboard', async (req, res) => {
     }
 });
 
+// Perbaikan: Ubah dari delete menjadi update
 router.delete('/scores/reset', async (req, res) => {
     try {
-        await Score.deleteMany({});
-        res.status(200).send({ message: 'Leaderboard berhasil direset.' });
+        // Mengubah semua skor menjadi 0
+        await Score.updateMany({}, { score: 0 });
+        res.status(200).send({ message: 'Skor leaderboard berhasil direset.' });
     } catch (err) {
         console.error('Error saat mereset leaderboard:', err);
         res.status(500).send({ message: 'Gagal mereset leaderboard.' });
     }
 });
 
-// Penting: Gunakan router secara langsung
 app.use('/api', router);
 
 // Ekspor aplikasi Anda sebagai fungsi serverless
