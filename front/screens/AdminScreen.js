@@ -25,7 +25,6 @@ const AdminScreen = ({ navigation }) => {
             }
             const data = await response.json();
             setLeaderboard(data);
-            setLastFetchTimestamp(new Date());
         } catch (error) {
             console.error("Gagal mengambil data leaderboard:", error);
             Alert.alert("Error", "Gagal mengambil data leaderboard. Cek koneksi server.");
