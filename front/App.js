@@ -16,6 +16,8 @@ import AdminScreen from './screens/AdminScreen';
 
 // --- 1. IMPOR SCREEN SKOR DI SINI ---
 import SkorScreen from './screens/skor'; 
+import LoginScreen from './screens/LoginScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +52,7 @@ export default function App() {
         <Stack.Screen name="TotalScore" component={TotalScoreScreen} />
         <Stack.Screen name="Game3" component={Game3Screen} />
         <Stack.Screen name="Skor" component={SkorScreen} />
+        <Stack.Screen name="LoginScreen" component={LoginScreen} /> 
         <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
       </Stack.Navigator>
     </NavigationContainer>
