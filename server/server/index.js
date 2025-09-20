@@ -71,15 +71,22 @@ router.get('/leaderboard', async (req, res) => {
 });
 
 // Reset leaderboard (update score jadi 0)
-router.put('/scores/reset', async (req, res) => {
+router.put("/scores/reset", async (req, res) => {
   try {
-    await Score.updateMany({}, { score: 0 });
-    res.status(200).send({ message: '✅ Skor leaderboard berhasil direset.' });
+    await client.connect();
+    const db = client.db(test);
+    const scores = db.collection("scores");
+
+    // update semua score jadi 0
+    await scores.updateMany({}, { $set: { score: 0 } });
+
+    res.status(200).send({ message: "✅ Skor leaderboard berhasil direset." });
   } catch (err) {
-    console.error('❌ Error saat reset leaderboard:', err);
-    res.status(500).send({ message: 'Gagal reset leaderboard.' });
+    console.error("❌ Error saat reset leaderboard:", err);
+    res.status(500).send({ message: "Gagal reset leaderboard." });
   }
 });
+
 
 // === AUTH ===
 // Register
