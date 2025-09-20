@@ -45,7 +45,6 @@ export default function LoginScreen() {
 
 
   return (
-    {/* Admin button in top-left */}
             <Pressable onPress={goToAdminScreen} style={styles.kembaliButton}>
                 <Text style={styles.kembaliButtonText}>KEMBALI</Text>
             </Pressable>
@@ -135,4 +134,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
 
