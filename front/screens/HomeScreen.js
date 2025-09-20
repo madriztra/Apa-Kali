@@ -126,45 +126,109 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+    // --- Latar Belakang dan Kontainer Utama ---
     background: {
         flex: 1,
         width: '100%',
         height: '100%',
     },
-    soundButton: {
-        position: 'absolute',
-        top: Platform.OS === 'web' ? 20 : 40,
-        right: 20,
-        zIndex: 99,
-    },
-    // --- TOMBOL ADMIN ---
-    adminButton: {
-        position: 'absolute',
-        top: Platform.OS === 'web' ? moderateScale(20) : moderateScale(50),
-        left: moderateScale(20),
-        zIndex: 99,
-        padding: 5,
-    },
-    adminIcon: {
-        width: moderateScale(85),
-        height: moderateScale(85),
-    },
-    soundIcon: {
-        width: 70,
-        height: 70,
+    overlay: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: moderateScale(20),
     },
     centerContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    logo: {
-        width: 300,
-        height: 120,
-        marginBottom: 40,
+
+    // --- Tombol-tombol ---
+    soundButton: {
+        position: 'absolute',
+        top: Platform.OS === 'web' ? moderateScale(20) : moderateScale(40),
+        right: moderateScale(20),
+        zIndex: 99,
+    },
+    backButton: {
+        position: "absolute",
+        top: Platform.OS === "web" ? moderateScale(20) : moderateScale(40),
+        left: moderateScale(20),
+        zIndex: 99,
+        backgroundColor: "rgba(0,0,0,0.6)",
+        borderRadius: 50,
+        padding: 8,
+    },
+    adminButton: {
+        position: 'absolute',
+        top: Platform.OS === 'web' ? moderateScale(20) : moderateScale(50),
+        left: moderateScale(20),
+        zIndex: 99,
+    },
+    button: {
+        width: "100%",
+        backgroundColor: "#007bff",
+        paddingVertical: moderateScale(14),
+        borderRadius: moderateScale(12),
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: moderateScale(2) },
+        shadowRadius: moderateScale(6),
+        elevation: 3,
     },
     playButton: {
-        width: 160,
-        height: 160,
+        width: moderateScale(160),
+        height: moderateScale(160),
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: moderateScale(18),
+        fontWeight: "600",
+    },
+
+    // --- Ikon & Gambar ---
+    soundIcon: {
+        width: moderateScale(70),
+        height: moderateScale(70),
+    },
+    backIcon: {
+        width: moderateScale(30),
+        height: moderateScale(30),
+        tintColor: "#fff",
+    },
+    adminIcon: {
+        width: moderateScale(85),
+        height: moderateScale(85),
+        marginTop: moderateScale(-5),
+    },
+    logo: {
+        width: moderateScale(300),
+        height: moderateScale(120),
+        marginBottom: moderateScale(40),
+    },
+
+    // --- Teks & Input ---
+    title: {
+        fontSize: moderateScale(28),
+        fontWeight: "bold",
+        marginBottom: moderateScale(30),
+        color: "#333",
+    },
+    loginContainer: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    input: {
+        width: "100%",
+        height: moderateScale(50),
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: moderateScale(12),
+        paddingHorizontal: moderateScale(15),
+        fontSize: moderateScale(16),
+        marginBottom: moderateScale(15),
+        backgroundColor: "#fff",
     },
 });

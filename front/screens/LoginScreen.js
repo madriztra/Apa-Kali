@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -18,28 +18,26 @@ import { useNavigation } from "@react-navigation/native";
 
 const API_URL = "https://apakalini.netlify.app/api";
 
-// --- SCALE UTK RESPONSIVE ---
+// --- FUNGSI SKALA UNTUK RESPONSIF ---
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
-// Menggunakan Animated.ImageBackground untuk kompatibilitas
-const AnimatedBg = Animated.createAnimatedComponent(ImageBackground);
-
-// --- FUNGSI & HELPER UNTUK RESPONSIVE & WEB COMPATIBILITY ---
 const guidelineBaseWidth = 375;
 const scale = (size) => (SCREEN_WIDTH / guidelineBaseWidth) * size;
 const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
-const useSafeNativeDriver = Platform.OS !== 'web'; // Variabel ini tidak digunakan, tetapi saya tetap menyimpannya
+
+// Menggunakan Animated.ImageBackground untuk kompatibilitas
+const AnimatedBg = Animated.createAnimatedComponent(ImageBackground);
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-  // Variabel animasi yang tidak digunakan dihapus
   const formOpacity = useRef(new Animated.Value(0)).current;
   const formTranslateY = useRef(new Animated.Value(moderateScale(20))).current;
-  const adminOpacity = useRef(new Animated.Value(0)).current;
-  const adminTranslateY = useRef(new Animated.Value(moderateScale(10))).current;
+
+  // Tidak ada animasi untuk admin, jadi variabel ini dihapus
+  // const adminOpacity = useRef(new Animated.Value(0)).current;
+  // const adminTranslateY = useRef(new Animated.Value(moderateScale(10))).current;
 
   const handleLogin = () => {
     fetch(`${API_URL}/login`, {
@@ -72,25 +70,25 @@ export default function LoginScreen() {
   };
 
   useEffect(() => {
-          Animated.parallel([
-              Animated.timing(formOpacity, {
-                  toValue: 1,
-                  delay: 300,
-                  duration: 500,
-                  useNativeDriver: useSafeNativeDriver,
-              }),
-              Animated.timing(formTranslateY, {
-                  toValue: 0,
-                  delay: 300,
-                  duration: 500,
-                  useNativeDriver: useSafeNativeDriver,
-              }),
-          ]).start();
-      }, []);
+    Animated.parallel([
+      Animated.timing(formOpacity, {
+        toValue: 1,
+        delay: 300,
+        duration: 500,
+        useNativeDriver: Platform.OS !== 'web',
+      }),
+      Animated.timing(formTranslateY, {
+        toValue: 0,
+        delay: 300,
+        duration: 500,
+        useNativeDriver: Platform.OS !== 'web',
+      }),
+    ]).start();
+  }, []);
 
   return (
-    <AnimatedBg
-      source={require("../assets/splashbg.png")}
+    <ImageBackground
+      source={require('../assets/splashbg.png')}
       style={styles.background}
       resizeMode="cover"
     >
@@ -103,98 +101,142 @@ export default function LoginScreen() {
           />
         </Pressable>
 
-        <Text style={styles.title}>Login</Text>
-
-        <TextInput
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Email"
-          style={styles.input}
-          placeholderTextColor="#999"
+        <Image
+            source={require('../assets/title.png')}
+            style={styles.logo}
+            resizeMode="contain"
         />
 
-        <TextInput
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Password"
-          secureTextEntry
-          style={styles.input}
-          placeholderTextColor="#999"
-        />
+        <Animated.View style={[styles.loginContainer, { opacity: formOpacity, transform: [{ translateY: formTranslateY }] }]}>
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email"
+            style={styles.input}
+            placeholderTextColor="#999"
+          />
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Masuk</Text>
-        </TouchableOpacity>
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Password"
+            secureTextEntry
+            style={styles.input}
+            placeholderTextColor="#999"
+          />
+
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Masuk</Text>
+          </TouchableOpacity>
+        </Animated.View>
       </View>
-    </AnimatedBg>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  // --- BACK BUTTON ---
-  backButton: {
-    position: "absolute",
-    top: Platform.OS === "web" ? moderateScale(20) : moderateScale(40),
-    left: moderateScale(20),
-    zIndex: 99,
-    // Perbaikan opasitas di sini
-    borderRadius: 50,
-    padding: 8,
-  },
-  backIcon: {
-    width: moderateScale(85),
-    height: moderateScale(85),
-  },
+    // --- Latar Belakang dan Kontainer Utama ---
+    background: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+    },
+    overlay: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: moderateScale(20),
+    },
+    centerContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 
-  // --- BACKGROUND & LAYOUT ---
-  background: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(255,255,255,0.7)",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
+    // --- Tombol-tombol ---
+    soundButton: {
+        position: 'absolute',
+        top: Platform.OS === 'web' ? moderateScale(20) : moderateScale(40),
+        right: moderateScale(20),
+        zIndex: 99,
+    },
+    backButton: {
+        position: "absolute",
+        top: Platform.OS === "web" ? moderateScale(20) : moderateScale(40),
+        left: moderateScale(20),
+        zIndex: 99,
+        borderRadius: 50,
+        padding: 8,
+    },
+    adminButton: {
+        position: 'absolute',
+        top: Platform.OS === 'web' ? moderateScale(20) : moderateScale(50),
+        left: moderateScale(20),
+        zIndex: 99,
+    },
+    button: {
+        width: "100%",
+        backgroundColor: "#007bff",
+        paddingVertical: moderateScale(14),
+        borderRadius: moderateScale(12),
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: moderateScale(2) },
+        shadowRadius: moderateScale(6),
+        elevation: 3,
+    },
+    playButton: {
+        width: moderateScale(160),
+        height: moderateScale(160),
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: moderateScale(18),
+        fontWeight: "600",
+    },
 
-  // --- TEXT & INPUT ---
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 30,
-    color: "#333",
-  },
-  input: {
-    width: "100%",
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    fontSize: 16,
-    marginBottom: 15,
-    backgroundColor: "#fff",
-  },
+    // --- Ikon & Gambar ---
+    soundIcon: {
+        width: moderateScale(70),
+        height: moderateScale(70),
+    },
+    backIcon: {
+        width: moderateScale(81),
+        height: moderateScale(81),
+        marginTop: moderateScale(-11),
+        left: moderateScale(-8),
+    },
+    adminIcon: {
+        width: moderateScale(85),
+        height: moderateScale(85),
+    },
+    logo: {
+        width: moderateScale(300),
+        height: moderateScale(120),
+        marginBottom: moderateScale(40),
+    },
 
-  // --- BUTTON ---
-  button: {
-    width: "100%",
-    backgroundColor: "#007bff",
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "600",
-  },
+    // --- Teks & Input ---
+    title: {
+        fontSize: moderateScale(28),
+        fontWeight: "bold",
+        marginBottom: moderateScale(30),
+        color: "#333",
+    },
+    loginContainer: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    input: {
+        width: "100%",
+        height: moderateScale(50),
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: moderateScale(12),
+        paddingHorizontal: moderateScale(15),
+        fontSize: moderateScale(16),
+        marginBottom: moderateScale(15),
+        backgroundColor: "#fff",
+    },
 });

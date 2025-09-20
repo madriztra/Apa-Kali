@@ -252,8 +252,7 @@ const styles = StyleSheet.create({
         zIndex: 99,
     },
     backIcon: {
-        width: moderateScale(85),
-        height: moderateScale(85),
+        width: moderateScale(82),
+        height: moderateScale(82),
     },
 });
-
