@@ -172,16 +172,6 @@ const TotalScoreScreen = ({ route, navigation }) => {
                     contentContainerStyle={styles.leaderboardContent}
                     ListEmptyComponent={<Text style={styles.emptyListText}>Leaderboard masih kosong.</Text>}
                 />
-
-                {/* Tombol Navigasi */}
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity 
-                        style={styles.button}
-                        onPress={() => navigation.navigate('HomeScreen')}
-                    >
-                        <Text style={styles.buttonText}>Kembali ke Menu Utama</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         </ImageBackground>
     );
@@ -356,4 +346,5 @@ const styles = StyleSheet.create({
 });
 
 export default TotalScoreScreen;
+
 
