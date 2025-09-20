@@ -6,39 +6,60 @@ import {
     Pressable,
     Image,
     Platform,
-    Text,
+    Dimensions,
 } from 'react-native';
-import { Audio } from 'expo-av';
+// Mengganti 'expo-av' dengan 'expo-audio'
+import { Audio } from 'expo-audio';
 import { useNavigation } from '@react-navigation/native';
+
+// --- SCALE UNTUK RESPONSIVE ---
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const guidelineBaseWidth = 375;
+const moderateScale = (size, factor = 0.5) => size + ((SCREEN_WIDTH / guidelineBaseWidth) * size - size) * factor;
 
 export default function HomeScreen() {
     const navigation = useNavigation();
     const [soundOn, setSoundOn] = useState(Platform.OS !== 'web');
     const soundRef = useRef(null);
 
+    // Memuat dan memutar audio
     useEffect(() => {
-        (async () => {
+        const loadAudio = async () => {
             try {
+                // Konfigurasi audio untuk platform web dan native
+                await Audio.setAudioModeAsync({
+                    allowsRecordingIOS: false,
+                    playsInSilentModeIOS: true,
+                    staysActiveInBackground: false,
+                    interruptionModeIOS: 1, // 'interruptionModeIOS: InterruptionsArePlaysAndPauses'
+                    shouldDuckAndroid: true,
+                    interruptionModeAndroid: 1, // 'interruptionModeAndroid: INTERRUPTION_MODE_DO_NOT_MIX'
+                    playThroughEarpieceAndroid: false,
+                });
                 const { sound } = await Audio.Sound.createAsync(
                     require('../assets/music/main.mp3'),
                     {
-                        shouldPlay: Platform.OS !== 'web',
+                        shouldPlay: soundOn,
                         isLooping: true,
                     }
                 );
                 soundRef.current = sound;
             } catch (err) {
-                console.warn('Gagal load audio:', err);
+                console.warn('Gagal memuat audio:', err);
             }
-        })();
+        };
+
+        loadAudio();
 
         return () => {
+            // Hentikan dan bongkar audio saat komponen dilepas
             if (soundRef.current) {
                 soundRef.current.unloadAsync();
             }
         };
     }, []);
 
+    // Mengubah status audio
     const toggleSound = async () => {
         if (!soundRef.current) return;
 
@@ -77,9 +98,13 @@ export default function HomeScreen() {
                 />
             </Pressable>
             
-            {/* Admin button in top-left */}
+            {/* Tombol Admin di kiri atas */}
             <Pressable onPress={goToAdminScreen} style={styles.adminButton}>
-                <Text style={styles.adminButtonText}>ADMIN</Text>
+                <Image
+                    source={require('../assets/admin.png')}
+                    style={styles.adminIcon}
+                    resizeMode="contain"
+                />
             </Pressable>
 
             <View style={styles.centerContainer}>
@@ -112,21 +137,17 @@ const styles = StyleSheet.create({
         right: 20,
         zIndex: 99,
     },
+    // --- TOMBOL ADMIN ---
     adminButton: {
         position: 'absolute',
-        top: Platform.OS === 'web' ? 20 : 40,
-        left: 20,
+        top: Platform.OS === 'web' ? moderateScale(20) : moderateScale(50),
+        left: moderateScale(20),
         zIndex: 99,
-        // Match the styling of the play button
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        paddingVertical: 10,
+        padding: 5,
     },
-    adminButtonText: {
-        color: '#FFFFFF',
-        fontSize: 20,
-        fontWeight: 'bold',
+    adminIcon: {
+        width: moderateScale(85),
+        height: moderateScale(85),
     },
     soundIcon: {
         width: 70,
