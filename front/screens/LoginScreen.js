@@ -61,7 +61,11 @@ export default function LoginScreen() {
     >
       <View style={styles.overlay}>
         <Pressable onPress={goToHomeScreen} style={styles.kembaliButton}>
-          <Text style={styles.kembaliButtonText}>KEMBALI</Text>
+          <Image
+                        source={require('../assets/back-button.png')}
+                        style={styles.backIcon}
+                        resizeMode="contain"
+                    />
         </Pressable>
 
         <Text style={styles.title}>Login</Text>
@@ -154,3 +158,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
