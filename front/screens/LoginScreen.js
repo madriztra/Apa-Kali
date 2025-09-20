@@ -45,6 +45,10 @@ export default function LoginScreen() {
 
 
   return (
+    {/* Admin button in top-left */}
+            <Pressable onPress={goToAdminScreen} style={styles.kembaliButton}>
+                <Text style={styles.kembaliButtonText}>KEMBALI</Text>
+            </Pressable>
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
 
@@ -73,6 +77,22 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+  kembaliButton: {
+        position: 'absolute',
+        top: Platform.OS === 'web' ? 20 : 40,
+        left: 20,
+        zIndex: 99,
+        // Match the styling of the play button
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: 10,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+    },
+    kembaliButtonText: {
+        color: '#FFFFFF',
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
   container: {
     flex: 1,
     backgroundColor: "#f8f9fa",
@@ -115,3 +135,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
