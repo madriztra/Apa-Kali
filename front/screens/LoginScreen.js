@@ -8,10 +8,12 @@ import {
   StyleSheet,
   Pressable,
   Platform,
-  ImageBackground, // ✅ IMPORT INI
+  ImageBackground,
+  Image, // ✅ tambahin ini
 } from "react-native";
 import { login } from "../auth";
 import { useNavigation } from "@react-navigation/native";
+import { moderateScale } from "react-native-size-matters"; // ✅ import biar scale aman
 
 const API_URL = "https://apakalini.netlify.app/api";
 
@@ -62,10 +64,10 @@ export default function LoginScreen() {
       <View style={styles.overlay}>
         <Pressable onPress={goToHomeScreen} style={styles.kembaliButton}>
           <Image
-                        source={require('../assets/back-button.png')}
-                        style={styles.backIcon}
-                        resizeMode="contain"
-                    />
+            source={require("../assets/back-button.png")}
+            style={styles.backIcon}
+            resizeMode="contain"
+          />
         </Pressable>
 
         <Text style={styles.title}>Login</Text>
@@ -97,9 +99,10 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   backIcon: {
-        width: moderateScale(85),
-        height: moderateScale(85),
-    },
+    width: moderateScale(30),
+    height: moderateScale(30),
+    tintColor: "#fff", // ✅ biar icon putih, opsional
+  },
   background: {
     flex: 1,
     width: "100%",
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.7)", // ✅ transparan biar bg keliatan
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
@@ -118,14 +121,8 @@ const styles = StyleSheet.create({
     left: 20,
     zIndex: 99,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-  },
-  kembaliButtonText: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "bold",
+    borderRadius: 50, // bulat biar match sama icon
+    padding: 8,
   },
   title: {
     fontSize: 28,
@@ -162,5 +159,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-
-
