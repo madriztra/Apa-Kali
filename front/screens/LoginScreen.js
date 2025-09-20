@@ -58,12 +58,14 @@ export default function LoginScreen() {
   };
 
   return (
+    
     <ImageBackground
       source={require("../assets/splashbg.png")}
       style={styles.background}
       resizeMode="cover"
-    >
-      
+    >   
+
+      <View style={styles.overlay}>
         <Pressable onPress={goToHomeScreen}>
           <Image
             source={require("../assets/back-button.png")}
@@ -71,7 +73,7 @@ export default function LoginScreen() {
             resizeMode="contain"
           />
         </Pressable>
-        <View style={styles.overlay}>
+        
         <Text style={styles.title}>Login</Text>
 
         <TextInput
@@ -111,7 +113,10 @@ const styles = StyleSheet.create({
         width: moderateScale(85),
         height: moderateScale(85),
     },
-  background: { flex: 1, width: "100%", height: "100%" },
+  background: { 
+    width: "100%", 
+    height: "100%" 
+  },
   overlay: {
     flex: 1,
     backgroundColor: "rgba(255, 255, 255, 0.7)",
@@ -145,6 +150,7 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: "#fff", fontSize: 18, fontWeight: "600" },
 });
+
 
 
 
