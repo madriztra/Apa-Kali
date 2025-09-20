@@ -1,5 +1,5 @@
 [functions]
-  directory = "server"
+  directory = "server/server"
   node_bundler = "esbuild"
 
 [build]
