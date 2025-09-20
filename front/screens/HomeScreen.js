@@ -9,8 +9,9 @@ import {
     Dimensions,
 } from 'react-native';
 // Mengganti 'expo-av' dengan 'expo-audio'
-import { Audio } from 'expo-audio';
+import { Audio } from 'expo-av';
 import { useNavigation } from '@react-navigation/native';
+
 
 // --- SCALE UNTUK RESPONSIVE ---
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -19,58 +20,46 @@ const moderateScale = (size, factor = 0.5) => size + ((SCREEN_WIDTH / guidelineB
 
 export default function HomeScreen() {
     const navigation = useNavigation();
-    const [soundOn, setSoundOn] = useState(Platform.OS !== 'web');
-    const soundRef = useRef(null);
-
-    // Memuat dan memutar audio
-    useEffect(() => {
-        const loadAudio = async () => {
-            try {
-                // Konfigurasi audio untuk platform web dan native
-                await Audio.setAudioModeAsync({
-                    allowsRecordingIOS: false,
-                    playsInSilentModeIOS: true,
-                    staysActiveInBackground: false,
-                    interruptionModeIOS: 1, // 'interruptionModeIOS: InterruptionsArePlaysAndPauses'
-                    shouldDuckAndroid: true,
-                    interruptionModeAndroid: 1, // 'interruptionModeAndroid: INTERRUPTION_MODE_DO_NOT_MIX'
-                    playThroughEarpieceAndroid: false,
-                });
-                const { sound } = await Audio.Sound.createAsync(
-                    require('../assets/music/main.mp3'),
-                    {
-                        shouldPlay: soundOn,
-                        isLooping: true,
-                    }
-                );
-                soundRef.current = sound;
-            } catch (err) {
-                console.warn('Gagal memuat audio:', err);
-            }
-        };
-
-        loadAudio();
-
+      const [soundOn, setSoundOn] = useState(Platform.OS !== 'web'); // Web: OFF dulu, Mobile: ON
+      const soundRef = useRef(null);
+    
+      useEffect(() => {
+        // Load musik saat komponen mount, tapi jangan langsung play di web
+        (async () => {
+          try {
+            const { sound } = await Audio.Sound.createAsync(
+              require('../assets/music/main.mp3'),
+              {
+                shouldPlay: Platform.OS !== 'web', // langsung play kalau mobile
+                isLooping: true,
+              }
+            );
+            soundRef.current = sound;
+          } catch (err) {
+            console.warn('Gagal load audio:', err);
+          }
+        })();
+    
         return () => {
-            // Hentikan dan bongkar audio saat komponen dilepas
-            if (soundRef.current) {
-                soundRef.current.unloadAsync();
-            }
+          // Bersihkan saat unmount
+          if (soundRef.current) {
+            soundRef.current.unloadAsync();
+          }
         };
-    }, []);
-
-    // Mengubah status audio
-    const toggleSound = async () => {
+      }, []);
+    
+      const toggleSound = async () => {
         if (!soundRef.current) return;
-
+    
         if (soundOn) {
-            await soundRef.current.pauseAsync();
+          await soundRef.current.pauseAsync();
         } else {
-            await soundRef.current.playAsync();
+          await soundRef.current.playAsync();
         }
-
+    
         setSoundOn(!soundOn);
-    };
+      };
+    
 
     const goToNameScreen = () => {
         navigation.navigate('NameScreen');
@@ -87,16 +76,16 @@ export default function HomeScreen() {
             resizeMode="cover"
         >
             <Pressable onPress={toggleSound} style={styles.soundButton}>
-                <Image
-                    source={
+                    <Image
+                      source={
                         soundOn
-                            ? require('../assets/speaker-on.png')
-                            : require('../assets/speaker-off.png')
-                    }
-                    style={styles.soundIcon}
-                    resizeMode="contain"
-                />
-            </Pressable>
+                          ? require('../assets/speaker-on.png')
+                          : require('../assets/speaker-off.png')
+                      }
+                      style={styles.soundIcon}
+                      resizeMode="contain"
+                    />
+                  </Pressable>
             
             {/* Tombol Admin di kiri atas */}
             <Pressable onPress={goToAdminScreen} style={styles.adminButton}>
