@@ -17,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const API_URL = "https://apakalini.netlify.app/api";
 
+// --- SCALE UTK RESPONSIVE ---
 const guidelineBaseWidth = 375;
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const scale = (size) => (SCREEN_WIDTH / guidelineBaseWidth) * size;
@@ -58,22 +59,20 @@ export default function LoginScreen() {
   };
 
   return (
-    
     <ImageBackground
       source={require("../assets/splashbg.png")}
       style={styles.background}
       resizeMode="cover"
-    >   
-
+    >
       <View style={styles.overlay}>
-        <Pressable onPress={goToHomeScreen}>
+        <Pressable onPress={goToHomeScreen} style={styles.backButton}>
           <Image
             source={require("../assets/back-button.png")}
             style={styles.backIcon}
             resizeMode="contain"
           />
         </Pressable>
-        
+
         <Text style={styles.title}>Login</Text>
 
         <TextInput
@@ -103,28 +102,42 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   // --- BACK BUTTON ---
-    backButton: {
-        position: 'absolute',
-        top: Platform.OS === 'web' ? moderateScale(20) : moderateScale(50),
-        left: moderateScale(20),
-        zIndex: 99,
-    },
-    backIcon: {
-        width: moderateScale(85),
-        height: moderateScale(85),
-    },
-  background: { 
-    width: "100%", 
-    height: "100%" 
+  backButton: {
+    position: "absolute",
+    top: Platform.OS === "web" ? moderateScale(20) : moderateScale(40),
+    left: moderateScale(20),
+    zIndex: 99,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    borderRadius: 50,
+    padding: 8,
+  },
+  backIcon: {
+    width: moderateScale(30),
+    height: moderateScale(30),
+    tintColor: "#fff",
+  },
+
+  // --- BACKGROUND & LAYOUT ---
+  background: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
   },
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    backgroundColor: "rgba(255,255,255,0.7)",
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
   },
-  title: { fontSize: 28, fontWeight: "bold", marginBottom: 30, color: "#333" },
+
+  // --- TEXT & INPUT ---
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 30,
+    color: "#333",
+  },
   input: {
     width: "100%",
     height: 50,
@@ -136,10 +149,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: "#fff",
   },
+
+  // --- BUTTON ---
   button: {
     width: "100%",
     backgroundColor: "#007bff",
-    paddingVertical: 2,
+    paddingVertical: 14,
     borderRadius: 12,
     alignItems: "center",
     shadowColor: "#000",
@@ -148,10 +163,9 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 3,
   },
-  buttonText: { color: "#fff", fontSize: 18, fontWeight: "600" },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
+  },
 });
-
-
-
-
-
