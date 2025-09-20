@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
     top: Platform.OS === "web" ? moderateScale(20) : moderateScale(40),
     left: moderateScale(20),
     zIndex: 99,
-    backgroundColor: "rgba(0,0,0,0.3)",
+    // Perbaikan di sini: Ubah opasitas background untuk membuatnya lebih jelas
+    backgroundColor: "rgba(0,0,0,0.6)",
     borderRadius: 50,
     padding: 8,
   },
