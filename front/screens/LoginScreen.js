@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
+  Pressable, // ✅ IMPORT
+  Platform,  // ✅ biar top safe margin di mobile/web
 } from "react-native";
 import { login } from "../auth"; // flag sederhana
 import { useNavigation } from "@react-navigation/native";
@@ -18,38 +20,45 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const handleLogin = () => {
-  fetch(`${API_URL}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Login response:", data); // debug
-
-      if (data.message && data.message.includes("Login berhasil")) {
-        login(); // flag sederhana
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "AdminScreen" }],
-        });
-      } else {
-        Alert.alert("Login gagal", data.message || "Email atau password salah");
-      }
+    fetch(`${API_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     })
-    .catch((err) => {
-      console.error("Error login:", err);
-      Alert.alert("Error", "Terjadi kesalahan saat login");
-    });
-};
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Login response:", data);
 
+        if (data.message && data.message.includes("Login berhasil")) {
+          login(); // flag sederhana
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "AdminScreen" }],
+          });
+        } else {
+          Alert.alert(
+            "Login gagal",
+            data.message || "Email atau password salah"
+          );
+        }
+      })
+      .catch((err) => {
+        console.error("Error login:", err);
+        Alert.alert("Error", "Terjadi kesalahan saat login");
+      });
+  };
+
+  // ✅ function tombol kembali
+  const goToHomeScreen = () => {
+    navigation.replace("HomeScreen");
+  };
 
   return (
-    
     <View style={styles.container}>
-    <Pressable onPress={goToAdminScreen} style={styles.kembaliButton}>
-      <Text style={styles.kembaliButtonText}>KEMBALI</Text>
-    </Pressable>
+      <Pressable onPress={goToHomeScreen} style={styles.kembaliButton}>
+        <Text style={styles.kembaliButtonText}>KEMBALI</Text>
+      </Pressable>
+
       <Text style={styles.title}>Login</Text>
 
       <TextInput
@@ -78,21 +87,20 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   kembaliButton: {
-        position: 'absolute',
-        top: Platform.OS === 'web' ? 20 : 40,
-        left: 20,
-        zIndex: 99,
-        // Match the styling of the play button
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-    },
-    kembaliButtonText: {
-        color: '#FFFFFF',
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
+    position: "absolute",
+    top: Platform.OS === "web" ? 20 : 40,
+    left: 20,
+    zIndex: 99,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+  kembaliButtonText: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
   container: {
     flex: 1,
     backgroundColor: "#f8f9fa",
@@ -135,6 +143,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-
-
-
