@@ -6,10 +6,11 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
-  Pressable, // ✅ IMPORT
-  Platform,  // ✅ biar top safe margin di mobile/web
+  Pressable,
+  Platform,
+  ImageBackground, // ✅ IMPORT INI
 } from "react-native";
-import { login } from "../auth"; // flag sederhana
+import { login } from "../auth";
 import { useNavigation } from "@react-navigation/native";
 
 const API_URL = "https://apakalini.netlify.app/api";
@@ -30,7 +31,7 @@ export default function LoginScreen() {
         console.log("Login response:", data);
 
         if (data.message && data.message.includes("Login berhasil")) {
-          login(); // flag sederhana
+          login();
           navigation.reset({
             index: 0,
             routes: [{ name: "AdminScreen" }],
@@ -48,65 +49,75 @@ export default function LoginScreen() {
       });
   };
 
-  // ✅ function tombol kembali
   const goToHomeScreen = () => {
     navigation.replace("HomeScreen");
   };
 
   return (
-    <View style={styles.container}>
-      <Pressable onPress={goToHomeScreen} style={styles.kembaliButton}>
-        <Text style={styles.kembaliButtonText}>KEMBALI</Text>
-      </Pressable>
+    <ImageBackground
+      source={require("../assets/splashbg.png")}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Pressable onPress={goToHomeScreen} style={styles.kembaliButton}>
+          <Text style={styles.kembaliButtonText}>KEMBALI</Text>
+        </Pressable>
 
-      <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Login</Text>
 
-      <TextInput
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Email"
-        style={styles.input}
-        placeholderTextColor="#999"
-      />
+        <TextInput
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Email"
+          style={styles.input}
+          placeholderTextColor="#999"
+        />
 
-      <TextInput
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Password"
-        secureTextEntry
-        style={styles.input}
-        placeholderTextColor="#999"
-      />
+        <TextInput
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Password"
+          secureTextEntry
+          style={styles.input}
+          placeholderTextColor="#999"
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Masuk</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Masuk</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.7)", // ✅ transparan biar bg keliatan
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
   kembaliButton: {
     position: "absolute",
     top: Platform.OS === "web" ? 20 : 40,
     left: 20,
     zIndex: 99,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 10,
   },
   kembaliButtonText: {
-    color: "#FFFFFF",
+    color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f9fa",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
   },
   title: {
     fontSize: 28,
