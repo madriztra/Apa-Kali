@@ -8,11 +8,14 @@
     "deploy": "netlify deploy --prod"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongoose": "^8.3.2",
-    "netlify-cli": "^17.38.1",
     "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^23.6.0"
   }
 }
