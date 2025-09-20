@@ -64,7 +64,7 @@ export default function LoginScreen() {
       resizeMode="cover"
     >
       
-        <Pressable onPress={goToHomeScreen} style={styles.kembaliButton}>
+        <Pressable onPress={goToHomeScreen}>
           <Image
             source={require("../assets/back-button.png")}
             style={styles.backIcon}
@@ -119,15 +119,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
   },
-  kembaliButton: {
-    position: "absolute",
-    top: Platform.OS === "web" ? 20 : 40,
-    left: 20,
-    zIndex: 99,
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
-    borderRadius: 50,
-    padding: 8,
-  },
   title: { fontSize: 28, fontWeight: "bold", marginBottom: 30, color: "#333" },
   input: {
     width: "100%",
@@ -154,5 +145,6 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: "#fff", fontSize: 18, fontWeight: "600" },
 });
+
 
 
