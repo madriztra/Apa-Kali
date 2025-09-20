@@ -12,7 +12,7 @@ import {
     Alert,
 } from 'react-native';
 
-const API_URL = 'https://apakalini.netlify.app/api'; 
+const API_URL = 'https://bpom-challenge-v2.netlify.app/api'; 
 
 const calculateGame3Score = (timeInMillis) => {
     const timeInSeconds = timeInMillis / 1000;
@@ -356,3 +356,4 @@ const styles = StyleSheet.create({
 });
 
 export default TotalScoreScreen;
+
