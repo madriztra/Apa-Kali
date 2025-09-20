@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   ImageBackground,
   Image,
   Dimensions,
+  Animated,
 } from "react-native";
 import { login } from "../auth";
 import { useNavigation } from "@react-navigation/native";
@@ -18,15 +19,27 @@ import { useNavigation } from "@react-navigation/native";
 const API_URL = "https://apakalini.netlify.app/api";
 
 // --- SCALE UTK RESPONSIVE ---
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+// Menggunakan Animated.ImageBackground untuk kompatibilitas
+const AnimatedBg = Animated.createAnimatedComponent(ImageBackground);
+
+// --- FUNGSI & HELPER UNTUK RESPONSIVE & WEB COMPATIBILITY ---
 const guidelineBaseWidth = 375;
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const scale = (size) => (SCREEN_WIDTH / guidelineBaseWidth) * size;
 const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
+const useSafeNativeDriver = Platform.OS !== 'web'; // Variabel ini tidak digunakan, tetapi saya tetap menyimpannya
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+  // Variabel animasi yang tidak digunakan dihapus
+  const formOpacity = useRef(new Animated.Value(0)).current;
+  const formTranslateY = useRef(new Animated.Value(moderateScale(20))).current;
+  const adminOpacity = useRef(new Animated.Value(0)).current;
+  const adminTranslateY = useRef(new Animated.Value(moderateScale(10))).current;
 
   const handleLogin = () => {
     fetch(`${API_URL}/login`, {
@@ -58,8 +71,25 @@ export default function LoginScreen() {
     navigation.replace("HomeScreen");
   };
 
+  useEffect(() => {
+          Animated.parallel([
+              Animated.timing(formOpacity, {
+                  toValue: 1,
+                  delay: 300,
+                  duration: 500,
+                  useNativeDriver: useSafeNativeDriver,
+              }),
+              Animated.timing(formTranslateY, {
+                  toValue: 0,
+                  delay: 300,
+                  duration: 500,
+                  useNativeDriver: useSafeNativeDriver,
+              }),
+          ]).start();
+      }, []);
+
   return (
-    <ImageBackground
+    <AnimatedBg
       source={require("../assets/splashbg.png")}
       style={styles.background}
       resizeMode="cover"
@@ -96,7 +126,7 @@ export default function LoginScreen() {
           <Text style={styles.buttonText}>Masuk</Text>
         </TouchableOpacity>
       </View>
-    </ImageBackground>
+    </AnimatedBg>
   );
 }
 
@@ -107,15 +137,13 @@ const styles = StyleSheet.create({
     top: Platform.OS === "web" ? moderateScale(20) : moderateScale(40),
     left: moderateScale(20),
     zIndex: 99,
-    // Perbaikan di sini: Ubah opasitas background untuk membuatnya lebih jelas
-    backgroundColor: "rgba(0,0,0,0.6)",
+    // Perbaikan opasitas di sini
     borderRadius: 50,
     padding: 8,
   },
   backIcon: {
-    width: moderateScale(30),
-    height: moderateScale(30),
-    tintColor: "#fff",
+    width: moderateScale(85),
+    height: moderateScale(85),
   },
 
   // --- BACKGROUND & LAYOUT ---
