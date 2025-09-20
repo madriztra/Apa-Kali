@@ -9,15 +9,17 @@ import {
   Pressable,
   Platform,
   ImageBackground,
-  Image, // ✅ tambahin ini
+  Image,
+  Dimensions,
 } from "react-native";
 import { login } from "../auth";
 import { useNavigation } from "@react-navigation/native";
 
 const API_URL = "https://apakalini.netlify.app/api";
 
-// --- FUNGSI & HELPER UNTUK RESPONSIVE & WEB COMPATIBILITY ---
 const guidelineBaseWidth = 375;
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const scale = (size) => (SCREEN_WIDTH / guidelineBaseWidth) * size;
 const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
 
 export default function LoginScreen() {
@@ -42,10 +44,7 @@ export default function LoginScreen() {
             routes: [{ name: "AdminScreen" }],
           });
         } else {
-          Alert.alert(
-            "Login gagal",
-            data.message || "Email atau password salah"
-          );
+          Alert.alert("Login gagal", data.message || "Email atau password salah");
         }
       })
       .catch((err) => {
@@ -104,13 +103,9 @@ const styles = StyleSheet.create({
   backIcon: {
     width: moderateScale(30),
     height: moderateScale(30),
-    tintColor: "#fff", // ✅ biar icon putih, opsional
+    tintColor: "#fff",
   },
-  background: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
+  background: { flex: 1, width: "100%", height: "100%" },
   overlay: {
     flex: 1,
     backgroundColor: "rgba(255, 255, 255, 0.7)",
@@ -124,15 +119,10 @@ const styles = StyleSheet.create({
     left: 20,
     zIndex: 99,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
-    borderRadius: 50, // bulat biar match sama icon
+    borderRadius: 50,
     padding: 8,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 30,
-    color: "#333",
-  },
+  title: { fontSize: 28, fontWeight: "bold", marginBottom: 30, color: "#333" },
   input: {
     width: "100%",
     height: 50,
@@ -156,11 +146,5 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 3,
   },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "600",
-  },
+  buttonText: { color: "#fff", fontSize: 18, fontWeight: "600" },
 });
-
-
