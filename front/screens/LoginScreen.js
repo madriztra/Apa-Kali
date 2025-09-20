@@ -63,7 +63,7 @@ export default function LoginScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      <View style={styles.overlay}>
+      
         <Pressable onPress={goToHomeScreen} style={styles.kembaliButton}>
           <Image
             source={require("../assets/back-button.png")}
@@ -71,7 +71,7 @@ export default function LoginScreen() {
             resizeMode="contain"
           />
         </Pressable>
-
+        <View style={styles.overlay}>
         <Text style={styles.title}>Login</Text>
 
         <TextInput
@@ -154,4 +154,5 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: "#fff", fontSize: 18, fontWeight: "600" },
 });
+
 
