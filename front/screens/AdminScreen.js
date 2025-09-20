@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { checkAuth, logout } from "../auth"; // pakai flag sederhana
 
-const API_URL = 'https://apakalini.netlify.app/api';
+const API_URL = 'https://bpom-challenge-v2.netlify.app/api';
 
 const handleApiResponse = (response) => {
     return response.json().then((data) => {
@@ -242,3 +242,4 @@ const styles = StyleSheet.create({
 });
 
 export default AdminScreen;
+
