@@ -1,11 +1,11 @@
 [functions]
-  directory = "server/server"
+  directory = "server"
   node_bundler = "esbuild"
 
 [build]
-  command = "cd front && npm install && npx expo export"
+  command = "npm install && cd server && npm install && cd ../front && npm install && npx expo export"
   publish = "front/dist"
-  
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/index/:splat"
