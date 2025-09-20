@@ -9,6 +9,8 @@ import {
     FlatList,
     Alert,
 } from 'react-native';
+// kalau mau pakai token/AsyncStorage bisa diimport di sini
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const API_URL = 'https://apakalini.netlify.app/api';
 
@@ -23,6 +25,20 @@ const AdminScreen = ({ navigation }) => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [lastFetchTimestamp, setLastFetchTimestamp] = useState(null);
 
+    // 🔒 proteksi login
+    useEffect(() => {
+        const checkLogin = async () => {
+            // sementara hardcode, nanti ganti pakai AsyncStorage
+            const userLoggedIn = true; 
+            if (!userLoggedIn) {
+                Alert.alert("Akses ditolak", "Silakan login dulu.");
+                navigation.replace("Login");
+            }
+        };
+        checkLogin();
+    }, []);
+
+    // ambil leaderboard
     const fetchLeaderboard = async () => {
         try {
             const response = await fetch(`${API_URL}/leaderboard`);
@@ -35,6 +51,7 @@ const AdminScreen = ({ navigation }) => {
         }
     };
 
+    // reset leaderboard
     const resetLeaderboard = async () => {
         Alert.alert(
             "Konfirmasi Reset",
@@ -51,8 +68,6 @@ const AdminScreen = ({ navigation }) => {
                             });
 
                             await handleApiResponse(response);
-
-                            // Panggil fetchLeaderboard untuk memperbarui tampilan
                             await fetchLeaderboard(); 
                             Alert.alert("Sukses", "Skor leaderboard berhasil direset.");
                         } catch (error) {
@@ -69,6 +84,7 @@ const AdminScreen = ({ navigation }) => {
         fetchLeaderboard();
     }, []);
 
+    // render item leaderboard
     const renderLeaderboardItem = ({ item, index }) => (
         <View style={styles.leaderboardItem}>
             <Text style={styles.rankText}>#{index + 1}</Text>
@@ -116,7 +132,7 @@ const AdminScreen = ({ navigation }) => {
                     <FlatList
                         data={leaderboard}
                         renderItem={renderLeaderboardItem}
-                        keyExtractor={(item, index) => `${item.name}-${item.score}-${item.timestamp}`}
+                        keyExtractor={(item, index) => `${item.name}-${item.score}-${index}`}
                         style={styles.leaderboardList}
                         contentContainerStyle={styles.leaderboardContent}
                         ListEmptyComponent={<Text style={styles.emptyListText}>Belum ada data skor.</Text>}
@@ -135,9 +151,7 @@ const AdminScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    background: {
-        flex: 1,
-    },
+    background: { flex: 1 },
     container: {
         flex: 1,
         backgroundColor: 'rgba(15, 23, 42, 0.95)',
@@ -173,9 +187,7 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 8,
     },
-    leaderboardCard: {
-        flex: 1,
-    },
+    leaderboardCard: { flex: 1 },
     cardTitle: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -190,21 +202,14 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         alignItems: 'center',
     },
-    resetButton: {
-        backgroundColor: '#EF4444',
-    },
+    resetButton: { backgroundColor: '#EF4444' },
     buttonText: {
         color: '#FFFFFF',
         fontSize: 16,
         fontWeight: 'bold',
     },
-    leaderboardList: {
-        flex: 1,
-        width: '100%',
-    },
-    leaderboardContent: {
-        paddingBottom: 20,
-    },
+    leaderboardList: { flex: 1, width: '100%' },
+    leaderboardContent: { paddingBottom: 20 },
     leaderboardItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -247,14 +252,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10,
     },
-    backButton: {
-        marginTop: 20,
-        padding: 10,
-    },
-    backButtonText: {
-        color: '#CBD5E1',
-        fontSize: 16,
-    },
+    backButton: { marginTop: 20, padding: 10 },
+    backButtonText: { color: '#CBD5E1', fontSize: 16 },
 });
 
 export default AdminScreen;
