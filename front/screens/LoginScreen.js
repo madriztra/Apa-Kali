@@ -16,7 +16,7 @@ import {
 import { login } from "../auth";
 import { useNavigation } from "@react-navigation/native";
 
-const API_URL = "https://apakalini.netlify.app/api";
+const API_URL = "https://bpom-challenge-v2.netlify.app/api";
 
 // --- FUNGSI SKALA UNTUK RESPONSIF ---
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -239,4 +239,5 @@ const styles = StyleSheet.create({
         marginBottom: moderateScale(15),
         backgroundColor: "#fff",
     },
+
 });
