@@ -9,71 +9,69 @@ import {
     FlatList,
     Alert,
 } from 'react-native';
-// kalau mau pakai token/AsyncStorage bisa diimport di sini
-// import AsyncStorage from "@react-native-async-storage/async-storage";
+import { checkAuth, logout } from "../auth"; // pakai flag sederhana
 
 const API_URL = 'https://apakalini.netlify.app/api';
 
-const handleApiResponse = async (response) => {
-    if (!response.ok) {
-        throw new Error(`Server error: ${response.status} ${response.statusText}`);
-    }
-    return await response.json();
+const handleApiResponse = (response) => {
+    return response.json().then((data) => {
+        if (!response.ok) {
+            throw new Error(data.message || `Server error: ${response.status}`);
+        }
+        return data;
+    });
 };
 
 const AdminScreen = ({ navigation }) => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [lastFetchTimestamp, setLastFetchTimestamp] = useState(null);
 
-    // 🔒 proteksi login
+    // proteksi sederhana
     useEffect(() => {
-        const checkLogin = async () => {
-            // sementara hardcode, nanti ganti pakai AsyncStorage
-            const userLoggedIn = true; 
-            if (!userLoggedIn) {
-                Alert.alert("Akses ditolak", "Silakan login dulu.");
-                navigation.replace("Login");
-            }
-        };
-        checkLogin();
+        if (!checkAuth()) {
+            Alert.alert("Akses ditolak", "Silakan login dulu.");
+            navigation.replace("LoginScreen");
+        }
     }, []);
 
     // ambil leaderboard
-    const fetchLeaderboard = async () => {
-        try {
-            const response = await fetch(`${API_URL}/leaderboard`);
-            const data = await handleApiResponse(response);
-            setLeaderboard(data);
-            setLastFetchTimestamp(new Date());
-        } catch (error) {
-            console.error("Gagal mengambil data leaderboard:", error);
-            Alert.alert("Error", "Gagal mengambil data leaderboard. Cek koneksi server.");
-        }
+    const fetchLeaderboard = () => {
+        fetch(`${API_URL}/leaderboard`)
+            .then(handleApiResponse)
+            .then((data) => {
+                setLeaderboard(data);
+                setLastFetchTimestamp(new Date());
+            })
+            .catch((error) => {
+                console.error("Gagal mengambil leaderboard:", error);
+                Alert.alert("Error", error.message || "Gagal ambil leaderboard.");
+            });
     };
 
     // reset leaderboard
-    const resetLeaderboard = async () => {
+    const resetLeaderboard = () => {
         Alert.alert(
             "Konfirmasi Reset",
-            "Apakah Anda yakin ingin mereset skor semua pemain menjadi 0?",
+            "Yakin reset skor semua pemain?",
             [
                 { text: "Batal", style: "cancel" },
                 { 
-                    text: "Hapus", 
+                    text: "Reset", 
                     style: "destructive",
-                    onPress: async () => {
-                        try {
-                            const response = await fetch(`${API_URL}/scores/reset`, {
-                                method: 'DELETE',
-                            });
-
-                            await handleApiResponse(response);
-                            await fetchLeaderboard(); 
-                            Alert.alert("Sukses", "Skor leaderboard berhasil direset.");
-                        } catch (error) {
-                            console.error("Gagal mereset leaderboard:", error);
-                            Alert.alert("Error", "Gagal mereset leaderboard. Cek koneksi server.");
-                        }
+                    onPress: () => {
+                        fetch(`${API_URL}/scores/reset`, {
+                            method: 'POST',
+                            headers: { "Content-Type": "application/json" },
+                        })
+                        .then(handleApiResponse)
+                        .then(() => {
+                            fetchLeaderboard();
+                            Alert.alert("Sukses", "Leaderboard berhasil direset.");
+                        })
+                        .catch((error) => {
+                            console.error("Gagal reset leaderboard:", error);
+                            Alert.alert("Error", error.message || "Reset gagal.");
+                        });
                     }
                 }
             ]
@@ -84,7 +82,6 @@ const AdminScreen = ({ navigation }) => {
         fetchLeaderboard();
     }, []);
 
-    // render item leaderboard
     const renderLeaderboardItem = ({ item, index }) => (
         <View style={styles.leaderboardItem}>
             <Text style={styles.rankText}>#{index + 1}</Text>
@@ -132,7 +129,7 @@ const AdminScreen = ({ navigation }) => {
                     <FlatList
                         data={leaderboard}
                         renderItem={renderLeaderboardItem}
-                        keyExtractor={(item, index) => `${item.name}-${item.score}-${index}`}
+                        keyExtractor={(item, index) => `${item._id || item.name}-${index}`}
                         style={styles.leaderboardList}
                         contentContainerStyle={styles.leaderboardContent}
                         ListEmptyComponent={<Text style={styles.emptyListText}>Belum ada data skor.</Text>}
@@ -141,9 +138,12 @@ const AdminScreen = ({ navigation }) => {
 
                 <TouchableOpacity 
                     style={styles.backButton}
-                    onPress={() => navigation.goBack()}
+                    onPress={() => {
+                        logout();
+                        navigation.replace("HomeScreen");
+                    }}
                 >
-                    <Text style={styles.backButtonText}>Kembali</Text>
+                    <Text style={styles.backButtonText}>Logout</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
@@ -181,11 +181,6 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 20,
         marginBottom: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 8,
     },
     leaderboardCard: { flex: 1 },
     cardTitle: {
@@ -219,8 +214,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 12,
         marginBottom: 8,
-        borderWidth: 1,
-        borderColor: '#0EA5E9',
     },
     rankText: {
         fontSize: 16,
