@@ -129,6 +129,9 @@ export default function NameScreen() {
                             value={name}
                             onChangeText={setName}
                         />
+                        <Pressable style={({ pressed }) => [styles.okButton, pressed && { opacity: 0.8 }]} onPress={handleSubmit}>
+                          <Text style={styles.okButtonText}>OK</Text>
+                        </Pressable>
                     </Animated.View>
                 </KeyboardAvoidingView>
             </AnimatedBg>
