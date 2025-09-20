@@ -70,26 +70,20 @@ router.get('/leaderboard', async (req, res) => {
   }
 });
 
-// Reset leaderboard: semua skor jadi 0
+// Reset leaderboard: hapus semua user + skor
 router.post("/scores/reset", async (req, res) => {
   try {
-    const result = await Score.updateMany({}, { $set: { score: 0 } });
-
-    if (result.modifiedCount === 0) {
-      return res.status(404).json({ message: "Leaderboard kosong, ga ada yang direset." });
-    }
+    const result = await Score.deleteMany({}); // 💀 hapus semua dokumen
 
     res.status(200).json({
-      message: "✅ Semua skor berhasil direset.",
-      totalReset: result.modifiedCount,
+      message: "🔥 Semua data leaderboard berhasil dihapus.",
+      totalDeleted: result.deletedCount,
     });
   } catch (err) {
     console.error("❌ Error reset leaderboard:", err);
     res.status(500).json({ message: "Gagal reset leaderboard." });
   }
 });
-
-
 
 // === AUTH ===
 // Register
@@ -157,6 +151,7 @@ app.use('/api', router);
 
 // Ekspor aplikasi sebagai serverless function
 module.exports.handler = serverless(app);
+
 
 
 
