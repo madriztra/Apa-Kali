@@ -96,6 +96,10 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+  backIcon: {
+        width: moderateScale(85),
+        height: moderateScale(85),
+    },
   background: {
     flex: 1,
     width: "100%",
@@ -158,4 +162,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
 
