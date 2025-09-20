@@ -13,9 +13,13 @@ import {
 } from "react-native";
 import { login } from "../auth";
 import { useNavigation } from "@react-navigation/native";
-import { moderateScale } from "react-native-size-matters"; // ✅ import biar scale aman
 
 const API_URL = "https://apakalini.netlify.app/api";
+
+// --- FUNGSI & HELPER UNTUK RESPONSIVE & WEB COMPATIBILITY ---
+const guidelineBaseWidth = 375;
+const scale = (size) => (SCREEN_WIDTH / guidelineBaseWidth) * size;
+const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -159,3 +163,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
