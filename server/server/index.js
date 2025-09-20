@@ -70,22 +70,32 @@ router.get('/leaderboard', async (req, res) => {
   }
 });
 
-// Reset leaderboard (update score jadi 0)
+// Reset leaderboard: ambil semua data dari leaderboard lalu set score = 0
 router.post("/scores/reset", async (req, res) => {
   try {
     await client.connect();
-    const db = client.db("test"); // ✅ harus pake string
+    const db = client.db("test"); 
     const scores = db.collection("scores");
+
+    // ambil data leaderboard
+    const allScores = await scores.find({}).toArray();
+
+    if (!allScores || allScores.length === 0) {
+      return res.status(404).json({ message: "Leaderboard kosong." });
+    }
 
     // update semua score jadi 0
     await scores.updateMany({}, { $set: { score: 0 } });
 
-    res.status(200).send({ message: "✅ Skor leaderboard berhasil direset." });
+    res.status(200).json({ 
+      message: "✅ Semua skor direset.", 
+      totalReset: allScores.length 
+    });
   } catch (err) {
-    console.error("❌ Error saat reset leaderboard:", err);
-    res.status(500).send({ message: "Gagal reset leaderboard." });
+    console.error("❌ Error reset leaderboard:", err);
+    res.status(500).json({ message: "Gagal reset leaderboard." });
   } finally {
-    await client.close(); // ✅ jangan lupa tutup koneksi
+    await client.close();
   }
 });
 
@@ -156,5 +166,6 @@ app.use('/api', router);
 
 // Ekspor aplikasi sebagai serverless function
 module.exports.handler = serverless(app);
+
 
 
