@@ -71,7 +71,7 @@ router.get('/leaderboard', async (req, res) => {
 });
 
 // Reset leaderboard (update score jadi 0)
-router.put("/scores/reset", async (req, res) => {
+router.post("/scores/reset", async (req, res) => {
   try {
     await client.connect();
     const db = client.db("test"); // ✅ harus pake string
@@ -156,4 +156,5 @@ app.use('/api', router);
 
 // Ekspor aplikasi sebagai serverless function
 module.exports.handler = serverless(app);
+
 
