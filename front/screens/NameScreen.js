@@ -91,15 +91,6 @@ export default function NameScreen() {
         }
     };
     
-    // Perbaikan: Fungsi untuk menavigasi ke AdminScreen
-    const handleAdminSubmit = () => {
-        if (password === 'admin123') { // Ganti dengan password yang Anda inginkan
-            navigation.navigate('AdminScreen');
-        } else {
-            alert('Kata sandi salah!');
-        }
-    };
-
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <AnimatedBg
@@ -138,46 +129,6 @@ export default function NameScreen() {
                             value={name}
                             onChangeText={setName}
                         />
-
-                        {showAdminInput && (
-                            <Animated.View
-                                style={{
-                                    opacity: adminOpacity,
-                                    transform: [{ translateY: adminTranslateY }],
-                                    width: '100%',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <Text style={styles.label}>kata sandi</Text>
-                                <TextInput
-                                    placeholder="kata sandi"
-                                    placeholderTextColor="#64748B"
-                                    style={styles.input}
-                                    secureTextEntry
-                                    value={password}
-                                    onChangeText={setPassword}
-                                />
-                                <Pressable
-                                    style={({ pressed }) => [styles.okButton, pressed && { opacity: 0.8 }]}
-                                    onPress={handleAdminSubmit}
-                                >
-                                    <Text style={styles.okButtonText}>LOGIN ADMIN</Text>
-                                </Pressable>
-                            </Animated.View>
-                        )}
-                        
-                        {!showAdminInput && (
-                            <Pressable style={({ pressed }) => [styles.okButton, pressed && { opacity: 0.8 }]} onPress={handleSubmit}>
-                                <Text style={styles.okButtonText}>OK</Text>
-                            </Pressable>
-                        )}
-                        
-                        {/* Perbaikan: Tombol untuk memunculkan input admin */}
-                        {!showAdminInput && (
-                            <Pressable onPress={revealAdminInput}>
-                                <Text style={styles.adminLinkText}>Login sebagai Admin</Text>
-                            </Pressable>
-                        )}
                     </Animated.View>
                 </KeyboardAvoidingView>
             </AnimatedBg>

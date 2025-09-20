@@ -48,35 +48,27 @@ const AdminScreen = ({ navigation }) => {
             });
     };
 
-    // reset leaderboard
-    const resetLeaderboard = () => {
-        Alert.alert(
-            "Konfirmasi Reset",
-            "Yakin reset skor semua pemain?",
-            [
-                { text: "Batal", style: "cancel" },
-                { 
-                    text: "Reset", 
-                    style: "destructive",
-                    onPress: () => {
-                        fetch(`${API_URL}/scores/reset`, {
-                            method: 'POST',
-                            headers: { "Content-Type": "application/json" },
-                        })
-                        .then(handleApiResponse)
-                        .then(() => {
-                            fetchLeaderboard();
-                            Alert.alert("Sukses", "Leaderboard berhasil direset.");
-                        })
-                        .catch((error) => {
-                            console.error("Gagal reset leaderboard:", error);
-                            Alert.alert("Error", error.message || "Reset gagal.");
-                        });
-                    }
-                }
-            ]
-        );
-    };
+const resetLeaderboard = async () => {
+  try {
+    const response = await fetch(`${API_URL}/scores/reset`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      Alert.alert("Sukses", data.message);
+      fetchLeaderboard(); // ✅ refresh setelah reset
+    } else {
+      Alert.alert("Error", "Gagal reset: " + data.message);
+    }
+  } catch (err) {
+    console.error("❌ Error reset leaderboard:", err);
+    Alert.alert("Error", "Terjadi kesalahan saat reset leaderboard.");
+  }
+};
+
+
 
     useEffect(() => {
         fetchLeaderboard();

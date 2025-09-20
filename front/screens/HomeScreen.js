@@ -56,7 +56,7 @@ export default function HomeScreen() {
     };
 
     const goToAdminScreen = () => {
-        navigation.navigate('AdminScreen');
+        navigation.navigate('LoginScreen');
     };
 
     return (
