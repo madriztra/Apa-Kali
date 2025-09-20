@@ -74,7 +74,7 @@ router.get('/leaderboard', async (req, res) => {
 router.put("/scores/reset", async (req, res) => {
   try {
     await client.connect();
-    const db = client.db(test);
+    const db = client.db("test"); // ✅ harus pake string
     const scores = db.collection("scores");
 
     // update semua score jadi 0
@@ -84,6 +84,8 @@ router.put("/scores/reset", async (req, res) => {
   } catch (err) {
     console.error("❌ Error saat reset leaderboard:", err);
     res.status(500).send({ message: "Gagal reset leaderboard." });
+  } finally {
+    await client.close(); // ✅ jangan lupa tutup koneksi
   }
 });
 
@@ -154,3 +156,4 @@ app.use('/api', router);
 
 // Ekspor aplikasi sebagai serverless function
 module.exports.handler = serverless(app);
+
