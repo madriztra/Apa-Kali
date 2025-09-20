@@ -100,11 +100,17 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  backIcon: {
-    width: moderateScale(30),
-    height: moderateScale(30),
-    tintColor: "#fff",
-  },
+  // --- BACK BUTTON ---
+    backButton: {
+        position: 'absolute',
+        top: Platform.OS === 'web' ? moderateScale(20) : moderateScale(50),
+        left: moderateScale(20),
+        zIndex: 99,
+    },
+    backIcon: {
+        width: moderateScale(85),
+        height: moderateScale(85),
+    },
   background: { flex: 1, width: "100%", height: "100%" },
   overlay: {
     flex: 1,
@@ -148,3 +154,4 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: "#fff", fontSize: 18, fontWeight: "600" },
 });
+
