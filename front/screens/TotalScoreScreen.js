@@ -24,12 +24,6 @@ export default function TotalScoreScreen({ route, navigation }) {
                 <Text style={styles.totalTimeText}>{waktuAkhir}</Text>
             </View>
 
-            <TouchableOpacity 
-                style={styles.button} 
-                onPress={() => navigation.popToTop()}
-            >
-                <Text style={styles.buttonText}>Kembali ke Menu</Text>
-            </TouchableOpacity>
         </View>
     );
 }
@@ -82,4 +76,5 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+
 });
